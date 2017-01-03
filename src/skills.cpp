@@ -2279,12 +2279,13 @@ bool check_skill( char_data * ch, const string & command, const string & argumen
  */
 CMDF( do_slist )
 {
-    int sn, i, lFound;
+    int sn, i;
     string arg1, arg2;
     char skn[MIL];
     int lowlev, hilev;
     short lasttype = SKILL_SPELL;
     int cl = ch->Class;
+    bool lFound;
 
     if( ch->isnpc(  ) )
         return;
@@ -2359,7 +2360,7 @@ CMDF( do_slist )
 
     for( i = lowlev; i <= hilev; ++i )
     {
-        lFound = 0;
+        lFound = false;
         mudstrlcpy( skn, "Spell", MIL );
         for( sn = 0; sn < num_skills; ++sn )
         {
@@ -2377,19 +2378,13 @@ CMDF( do_slist )
 
             if( i == skill_table[sn]->skill_level[cl] || i == skill_table[sn]->race_level[ch->race] )
             {
-                int xx = cl;
-
-                if( skill_table[sn]->type == SKILL_RACIAL )
-                    xx = ch->race;
-
                 if( !lFound )
                 {
-                    lFound = 1;
+                    lFound = true;
                     ch->pagerf( "Level %d\r\n", i );
                 }
 
-                ch->pagerf( "%7s: %20.20s \t Current: %-3d Max: %-3d  MinPos: %s \r\n",
-                            skn, skill_table[sn]->name, ch->pcdata->learned[sn], skill_table[sn]->skill_adept[xx], npc_position[skill_table[sn]->minimum_position] );
+                ch->pagerf( "%7s: %20.20s\r\n", skn, skill_table[sn]->name );
             }
         }
     }
