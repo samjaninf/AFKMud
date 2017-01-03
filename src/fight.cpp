@@ -1528,24 +1528,21 @@ void group_gain( char_data * ch, char_data * victim )
  * Added code to produce different messages based on weapon type - FB
  * Added better bug message so you can track down the bad dt's -Shaddai
  */
-void dam_message( char_data * ch, char_data * victim, double dam, unsigned int dt, obj_data * obj )
+void dam_message( char_data * ch, char_data * victim, int dam, unsigned int dt, obj_data * obj )
 {
     char buf1[256], buf2[256], buf3[256];
-    const char *vs;
-    const char *vp;
     const char *attack;
-    char punct;
-    double dampc, d_index;
     struct skill_type *skill = nullptr;
     bool gcflag = false;
     bool gvflag = false;
-    int w_index;
     room_index *was_in_room;
 
-    if( !dam )
-        dampc = 0;
-    else
-        dampc = ( ( dam * 1000 ) / victim->max_hit ) + ( 50 - ( ( victim->hit * 50 ) / victim->max_hit ) );
+    char colSkill[16], colWeapon[16], colPlayer[16], colVictim[16], colPoison[16];
+    snprintf( colSkill, 16, "%s", ch->color_str( AT_ORANGE ) );
+    snprintf( colWeapon, 16, "%s", ch->color_str( AT_HIT ) );
+    snprintf( colPlayer, 16, "%s", ch->color_str( AT_WHITE ) );
+    snprintf( colVictim, 16, "%s", ch->color_str( AT_BLOOD ) );
+    snprintf( colPoison, 16, "%s", ch->color_str( AT_POISON ) );
 
     if( ch->in_room != victim->in_room )
     {
@@ -1557,44 +1554,6 @@ void dam_message( char_data * ch, char_data * victim, double dam, unsigned int d
     else
         was_in_room = nullptr;
 
-    /*
-     * Get the weapon index 
-     */
-    if( dt > 0 && dt < ( unsigned int )num_skills )
-        w_index = 0;
-    else if( dt >= ( unsigned int )TYPE_HIT && dt < ( unsigned int )TYPE_HIT + sizeof( attack_table ) / sizeof( attack_table[0] ) )
-        w_index = dt - TYPE_HIT;
-    else
-    {
-        bug( "%s: bad dt %d from %s in %d.", __func__, dt, ch->name, ch->in_room->vnum );
-        dt = TYPE_HIT;
-        w_index = 0;
-    }
-
-    /*
-     * get the damage index 
-     */
-    if( dam == 0 )
-        d_index = 0;
-    else if( dampc < 0 )
-        d_index = 1;
-    else if( dampc <= 100 )
-        d_index = 1 + dampc / 10;
-    else if( dampc <= 200 )
-        d_index = 11 + ( dampc - 100 ) / 20;
-    else if( dampc <= 900 )
-        d_index = 16 + ( dampc - 200 ) / 100;
-    else
-        d_index = 23;
-
-    /*
-     * Lookup the damage message 
-     */
-    vs = s_message_table[w_index][( int )d_index];
-    vp = p_message_table[w_index][( int )d_index];
-
-    punct = ( dampc <= 30 ) ? '.' : '!';
-
     if( dam == 0 && ( ch->has_pcflag( PCFLAG_GAG ) ) )
         gcflag = true;
 
@@ -1605,9 +1564,9 @@ void dam_message( char_data * ch, char_data * victim, double dam, unsigned int d
         skill = skill_table[dt];
     if( dt == ( unsigned int )TYPE_HIT )
     {
-        snprintf( buf1, 256, "$n %s $N%c", vp, punct );
-        snprintf( buf2, 256, "You %s $N%c", vs, punct );
-        snprintf( buf3, 256, "$n %s you%c", vp, punct );
+        snprintf( buf1, 256, "$n hits $N.");
+        snprintf( buf2, 256, "%sYou hit %s$N%s for %d.", colPlayer, colVictim, colPlayer, dam);
+        snprintf( buf3, 256, "%s$n hits %sYou%s for %d.", colVictim, colPlayer, colVictim, dam);
     }
     else if( dt > ( unsigned int )TYPE_HIT && is_wielding_poisoned( ch ) )
     {
@@ -1619,15 +1578,15 @@ void dam_message( char_data * ch, char_data * victim, double dam, unsigned int d
             dt = TYPE_HIT;
             attack = attack_table[0];
         }
-        snprintf( buf1, 256, "$n's poisoned %s %s $N%c", attack, vp, punct );
-        snprintf( buf2, 256, "Your poisoned %s %s $N%c", attack, vp, punct );
-        snprintf( buf3, 256, "$n's poisoned %s %s you%c", attack, vp, punct );
+        snprintf( buf1, 256, "$n hits $N." );
+        snprintf( buf2, 256, "%sYour [%sPoison Melee%s] hits %s$N%s for %d.", colPlayer, colPoison, colPlayer, colVictim, colPlayer, dam );
+        snprintf( buf3, 256, "%s$n's [%sPoison Melee%s] hits %sYou%s for %d.", colVictim, colPoison, colVictim, colPlayer, colVictim, dam );
     }
     else
     {
         if( skill )
         {
-            attack = skill->noun_damage;
+            attack = skill->name;
             if( dam == 0 )
             {
                 bool found = false;
@@ -1681,9 +1640,9 @@ void dam_message( char_data * ch, char_data * victim, double dam, unsigned int d
             bug( "%s: bad dt %d from %s in %d.", __func__, dt, ch->name, ch->in_room->vnum );
             attack = attack_table[0];
         }
-        snprintf( buf1, 256, "$n's %s %s $N%c", attack, vp, punct );
-        snprintf( buf2, 256, "Your %s %s $N%c", attack, vp, punct );
-        snprintf( buf3, 256, "$n's %s %s you%c", attack, vp, punct );
+        snprintf( buf1, 256, "$n hits $N." );
+        snprintf( buf2, 256, "%sYour [%s%s%s] hits %s$N%s for %d.", colPlayer, colSkill, attack, colPlayer, colVictim, colPlayer, dam );
+        snprintf( buf3, 256, "%s$n's [%s%s%s] hits %sYou%s for %d.", colVictim, colSkill, attack, colVictim, colPlayer, colVictim, dam );
     }
 
     act( AT_ACTION, buf1, ch, nullptr, victim, TO_NOTVICT );
@@ -2955,8 +2914,9 @@ ch_ret damage( char_data * ch, char_data * victim, double dam, int dt )
             dam += 5;   /* add penalty for bare skin! */
     }
 
+    dam /= 8;
     if( ch != victim )
-        dam_message( ch, victim, dam, dt, nullptr );
+        dam_message( ch, victim, ( int ) dam, dt, nullptr );
 
     /*
      * Hurt the victim.

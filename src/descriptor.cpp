@@ -562,7 +562,7 @@ char *default_fprompt( char_data * ch )
     mudstrlcpy( buf, "&z[&W%h&whp ", 60 );
     mudstrlcat( buf, "&W%m&wm", 60 );
     mudstrlcat( buf, " &W%v&wmv&z] ", 60 );
-    mudstrlcat( buf, " [&R%c&z] ", 60 );
+    mudstrlcat( buf, " [&R%f/%g (%p)&z] ", 60 );
     if( ch->isnpc(  ) || ch->is_immortal(  ) )
         mudstrlcat( buf, "&W%i%R&D", 60 );
     return buf;
@@ -1988,38 +1988,25 @@ void descriptor_data::prompt(  )
                         }
                         break;
 
-                    case 'c':
+                    case 'p':
                         if( !ch->fighting || ( victim = ch->fighting->who ) == nullptr )
                             mudstrlcpy( pbuf, "N/A", MSL - ( pbuf - buf ) );
                         else
-                        {
-                            if( victim->max_hit > 0 )
-                                percent = ( 100 * victim->hit ) / victim->max_hit;
-                            else
-                                percent = -1;
-                            if( percent >= 100 )
-                                mudstrlcpy( pbuf, "perfect health", MSL - ( pbuf - buf ) );
-                            else if( percent >= 90 )
-                                mudstrlcpy( pbuf, "slightly scratched", MSL - ( pbuf - buf ) );
-                            else if( percent >= 80 )
-                                mudstrlcpy( pbuf, "few bruises", MSL - ( pbuf - buf ) );
-                            else if( percent >= 70 )
-                                mudstrlcpy( pbuf, "some cuts", MSL - ( pbuf - buf ) );
-                            else if( percent >= 60 )
-                                mudstrlcpy( pbuf, "several wounds", MSL - ( pbuf - buf ) );
-                            else if( percent >= 50 )
-                                mudstrlcpy( pbuf, "nasty wounds", MSL - ( pbuf - buf ) );
-                            else if( percent >= 40 )
-                                mudstrlcpy( pbuf, "bleeding freely", MSL - ( pbuf - buf ) );
-                            else if( percent >= 30 )
-                                mudstrlcpy( pbuf, "covered in blood", MSL - ( pbuf - buf ) );
-                            else if( percent >= 20 )
-                                mudstrlcpy( pbuf, "leaking guts", MSL - ( pbuf - buf ) );
-                            else if( percent >= 10 )
-                                mudstrlcpy( pbuf, "almost dead", MSL - ( pbuf - buf ) );
-                            else
-                                mudstrlcpy( pbuf, "DYING", MSL - ( pbuf - buf ) );
-                        }
+                            pstat = ( 100 * victim->hit ) / victim->max_hit;
+                        break;
+
+                    case 'f':
+                        if( !ch->fighting || ( victim = ch->fighting->who ) == nullptr )
+                            mudstrlcpy( pbuf, "N/A", MSL - ( pbuf - buf ) );
+                        else
+                            pstat = victim->hit;
+                        break;
+
+                    case 'F':
+                        if( !ch->fighting || ( victim = ch->fighting->who ) == nullptr )
+                            mudstrlcpy( pbuf, "N/A", MSL - ( pbuf - buf ) );
+                        else
+                            pstat = victim->max_hit;
                         break;
 
                     case 'h':
@@ -2108,7 +2095,7 @@ void descriptor_data::prompt(  )
                             pstat = ch->in_room->vnum;
                         break;
 
-                    case 'F':
+                    case 'l':
                         if( och->is_immortal(  ) )
                             mudstrlcpy( pbuf, bitset_string( ch->in_room->flags, r_flags ), MSL - ( pbuf - buf ) );
                         break;
