@@ -49,7 +49,7 @@ extern obj_data *supermob_obj;
 #define HAS_PROG( what, prog ) (what)->progtypes.test((prog))
 
 /* Ifstate defines, used to create and access ifstate array in mprog_driver. */
-const int MAX_IFS = 20; /* should always be generous */
+const int MAX_IFS = 20;  /* should always be generous */
 const int IN_IF = 0;
 const int IN_ELSE = 1;
 const int DO_IF = 2;
@@ -126,194 +126,194 @@ const int OGREET_PROG = GREET_PROG;
 /* Mob program structures */
 class mprog_act_list
 {
- private:
-   mprog_act_list( const mprog_act_list & m );
-     mprog_act_list & operator=( const mprog_act_list & );
+  private:
+    mprog_act_list( const mprog_act_list & m );
+      mprog_act_list & operator=( const mprog_act_list & );
 
- public:
-     mprog_act_list(  );
-    ~mprog_act_list(  );
+  public:
+      mprog_act_list(  );
+     ~mprog_act_list(  );
 
-   string buf;
-   char_data *ch;
-   obj_data *obj;
-   char_data *victim;
-   obj_data *target;
+    string buf;
+    char_data *ch;
+    obj_data *obj;
+    char_data *victim;
+    obj_data *target;
 };
 
 struct mud_prog_data
 {
- private:
-   mud_prog_data( const mud_prog_data & m );
-     mud_prog_data & operator=( const mud_prog_data & );
+  private:
+    mud_prog_data( const mud_prog_data & m );
+      mud_prog_data & operator=( const mud_prog_data & );
 
- public:
-     mud_prog_data(  );
-    ~mud_prog_data(  );
+  public:
+      mud_prog_data(  );
+     ~mud_prog_data(  );
 
-   char *arglist;
-   char *comlist;
-   int resetdelay;
-   short type;
-   bool triggered;
-   bool fileprog;
+    char *arglist;
+    char *comlist;
+    int resetdelay;
+    short type;
+    bool triggered;
+    bool fileprog;
 };
 
 template < class N > void fread_afk_mudprog( FILE * fp, mud_prog_data * mprg, N * prog_target )
 {
-   for( ;; )
-   {
-      const char *word = ( feof( fp ) ? "#ENDPROG" : fread_word( fp ) );
+    for( ;; )
+    {
+        const char *word = ( feof( fp ) ? "#ENDPROG" : fread_word( fp ) );
 
-      if( word[0] == '\0' )
-      {
-         log_printf( "%s: EOF encountered reading file!", __func__ );
-         word = "#ENDPROG";
-      }
+        if( word[0] == '\0' )
+        {
+            log_printf( "%s: EOF encountered reading file!", __func__ );
+            word = "#ENDPROG";
+        }
 
-      if( !str_cmp( word, "#ENDPROG" ) )
-         return;
+        if( !str_cmp( word, "#ENDPROG" ) )
+            return;
 
-      switch ( word[0] )
-      {
-         default:
-            log_printf( "%s: no match: %s", __func__, word );
-            fread_to_eol( fp );
-            break;
+        switch ( word[0] )
+        {
+            default:
+                log_printf( "%s: no match: %s", __func__, word );
+                fread_to_eol( fp );
+                break;
 
-         case 'A':
-            if( !str_cmp( word, "Arglist" ) )
-            {
-               mprg->arglist = fread_string( fp );
-               mprg->fileprog = false;
+            case 'A':
+                if( !str_cmp( word, "Arglist" ) )
+                {
+                    mprg->arglist = fread_string( fp );
+                    mprg->fileprog = false;
 
-               switch ( mprg->type )
-               {
-                  case IN_FILE_PROG:
-                     mprog_file_read( prog_target, mprg->arglist );
-                     break;
-                  default:
-                     break;
-               }
-               break;
-            }
-            break;
+                    switch ( mprg->type )
+                    {
+                        case IN_FILE_PROG:
+                            mprog_file_read( prog_target, mprg->arglist );
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                break;
 
-         case 'C':
-            KEY( "Comlist", mprg->comlist, fread_string( fp ) );
-            break;
+            case 'C':
+                KEY( "Comlist", mprg->comlist, fread_string( fp ) );
+                break;
 
-         case 'P':
-            if( !str_cmp( word, "Progtype" ) )
-            {
-               mprg->type = mprog_name_to_type( fread_flagstring( fp ) );
-               prog_target->progtypes.set( mprg->type );
-               break;
-            }
-            break;
-      }
-   }
+            case 'P':
+                if( !str_cmp( word, "Progtype" ) )
+                {
+                    mprg->type = mprog_name_to_type( fread_flagstring( fp ) );
+                    prog_target->progtypes.set( mprg->type );
+                    break;
+                }
+                break;
+        }
+    }
 }
 
 template < class N > void mprog_file_read( N * prog_target, const char *f )
 {
-   mud_prog_data *mprg = nullptr;
-   char MUDProgfile[256];
-   FILE *progfile;
+    mud_prog_data *mprg = nullptr;
+    char MUDProgfile[256];
+    FILE *progfile;
 
-   snprintf( MUDProgfile, 256, "%s%s", PROG_DIR, f );
+    snprintf( MUDProgfile, 256, "%s%s", PROG_DIR, f );
 
-   if( !( progfile = fopen( MUDProgfile, "r" ) ) )
-   {
-      bug( "%s: couldn't open mudprog file", __func__ );
-      return;
-   }
+    if( !( progfile = fopen( MUDProgfile, "r" ) ) )
+    {
+        bug( "%s: couldn't open mudprog file", __func__ );
+        return;
+    }
 
-   for( ;; )
-   {
-      char letter = fread_letter( progfile );
+    for( ;; )
+    {
+        char letter = fread_letter( progfile );
 
-      if( letter != '#' )
-      {
-         bug( "%s: MUDPROG char", __func__ );
-         break;
-      }
+        if( letter != '#' )
+        {
+            bug( "%s: MUDPROG char", __func__ );
+            break;
+        }
 
-      const char *word = ( feof( progfile ) ? "ENDFILE" : fread_word( progfile ) );
+        const char *word = ( feof( progfile ) ? "ENDFILE" : fread_word( progfile ) );
 
-      if( word[0] == '\0' )
-      {
-         log_printf( "%s: EOF encountered reading file!", __func__ );
-         word = "ENDFILE";
-      }
+        if( word[0] == '\0' )
+        {
+            log_printf( "%s: EOF encountered reading file!", __func__ );
+            word = "ENDFILE";
+        }
 
-      if( !str_cmp( word, "ENDFILE" ) )
-         break;
+        if( !str_cmp( word, "ENDFILE" ) )
+            break;
 
-      if( !str_cmp( word, "MUDPROG" ) )
-      {
-         mprg = new mud_prog_data;
+        if( !str_cmp( word, "MUDPROG" ) )
+        {
+            mprg = new mud_prog_data;
 
-         for( ;; )
-         {
-            word = ( feof( progfile ) ? "#ENDPROG" : fread_word( progfile ) );
-
-            if( word[0] == '\0' )
+            for( ;; )
             {
-               log_printf( "%s: EOF encountered reading file!", __func__ );
-               word = "#ENDPROG";
+                word = ( feof( progfile ) ? "#ENDPROG" : fread_word( progfile ) );
+
+                if( word[0] == '\0' )
+                {
+                    log_printf( "%s: EOF encountered reading file!", __func__ );
+                    word = "#ENDPROG";
+                }
+
+                if( !str_cmp( word, "#ENDPROG" ) )
+                {
+                    prog_target->progtypes.set( mprg->type );
+                    prog_target->mudprogs.push_back( mprg );
+                    break;
+                }
+
+                switch ( word[0] )
+                {
+                    default:
+                        log_printf( "%s: no match: %s", __func__, word );
+                        fread_to_eol( progfile );
+                        break;
+
+                    case 'A':
+                        if( !str_cmp( word, "Arglist" ) )
+                        {
+                            mprg->arglist = fread_string( progfile );
+                            mprg->fileprog = false;
+
+                            switch ( mprg->type )
+                            {
+                                case IN_FILE_PROG:
+                                    bug( "%s: Nested file programs are not allowed.", __func__ );
+                                    deleteptr( mprg );
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            break;
+                        }
+                        break;
+
+                    case 'C':
+                        KEY( "Comlist", mprg->comlist, fread_string( progfile ) );
+                        break;
+
+                    case 'P':
+                        if( !str_cmp( word, "Progtype" ) )
+                        {
+                            mprg->type = mprog_name_to_type( fread_flagstring( progfile ) );
+                            break;
+                        }
+                        break;
+                }
             }
-
-            if( !str_cmp( word, "#ENDPROG" ) )
-            {
-               prog_target->progtypes.set( mprg->type );
-               prog_target->mudprogs.push_back( mprg );
-               break;
-            }
-
-            switch ( word[0] )
-            {
-               default:
-                  log_printf( "%s: no match: %s", __func__, word );
-                  fread_to_eol( progfile );
-                  break;
-
-               case 'A':
-                  if( !str_cmp( word, "Arglist" ) )
-                  {
-                     mprg->arglist = fread_string( progfile );
-                     mprg->fileprog = false;
-
-                     switch ( mprg->type )
-                     {
-                        case IN_FILE_PROG:
-                           bug( "%s: Nested file programs are not allowed.", __func__ );
-                           deleteptr( mprg );
-                           break;
-
-                        default:
-                           break;
-                     }
-                     break;
-                  }
-                  break;
-
-               case 'C':
-                  KEY( "Comlist", mprg->comlist, fread_string( progfile ) );
-                  break;
-
-               case 'P':
-                  if( !str_cmp( word, "Progtype" ) )
-                  {
-                     mprg->type = mprog_name_to_type( fread_flagstring( progfile ) );
-                     break;
-                  }
-                  break;
-            }
-         }
-      }
-   }
-   FCLOSE( progfile );
+        }
+    }
+    FCLOSE( progfile );
 }
 
 extern list < room_index * >room_act_list;

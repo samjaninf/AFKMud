@@ -38,7 +38,7 @@
  */
 enum seasons
 {
-   SEASON_SPRING, SEASON_SUMMER, SEASON_FALL, SEASON_WINTER, SEASON_MAX
+    SEASON_SPRING, SEASON_SUMMER, SEASON_FALL, SEASON_WINTER, SEASON_MAX
 };
 
 /* Hunger/Thirst modifiers */
@@ -56,55 +56,55 @@ extern bool winter_freeze;
 
 class holiday_data
 {
- private:
-   holiday_data( const holiday_data & n );
-     holiday_data & operator=( const holiday_data & );
+  private:
+    holiday_data( const holiday_data & n );
+      holiday_data & operator=( const holiday_data & );
 
- public:
-     holiday_data(  );
-    ~holiday_data(  );
+  public:
+      holiday_data(  );
+     ~holiday_data(  );
 
-   void set_name( const string & newname )
-   {
-      name = newname;
-   }
-   string get_name(  )
-   {
-      return name;
-   }
+    void set_name( const string & newname )
+    {
+        name = newname;
+    }
+    string get_name(  )
+    {
+        return name;
+    }
 
-   void set_announce( const string & text )
-   {
-      announce = text;
-   }
-   string get_announce(  )
-   {
-      return announce;
-   }
+    void set_announce( const string & text )
+    {
+        announce = text;
+    }
+    string get_announce(  )
+    {
+        return announce;
+    }
 
-   void set_month( short mn )
-   {
-      month = mn;
-   }
-   short get_month(  )
-   {
-      return month;
-   }
+    void set_month( short mn )
+    {
+        month = mn;
+    }
+    short get_month(  )
+    {
+        return month;
+    }
 
-   void set_day( short dy )
-   {
-      day = dy;
-   }
-   short get_day(  )
-   {
-      return day;
-   }
+    void set_day( short dy )
+    {
+        day = dy;
+    }
+    short get_day(  )
+    {
+        return day;
+    }
 
- private:
-   string name;   /* Name of the holiday */
-   string announce;  /* Message to announce the holiday with */
-   short month;   /* Month the holiday falls in */
-   short day;  /* Day the holiday falls on */
+  private:
+    string name;    /* Name of the holiday */
+    string announce;     /* Message to announce the holiday with */
+    short month;    /* Month the holiday falls in */
+    short day; /* Day the holiday falls on */
 };
 
 void check_holiday( char_data * );

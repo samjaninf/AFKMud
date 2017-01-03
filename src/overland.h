@@ -41,7 +41,7 @@ const int MAX_Y = 1000;
 
 enum map_types
 {
-   MAP_ONE, MAP_MAX
+    MAP_ONE, MAP_MAX
 };
 
 // Single continent, starts at 0,0 in the NW corner. 1000x1000 default size.
@@ -54,54 +54,54 @@ extern const struct sect_color_type sect_show[];
 
 class landmark_data
 {
- private:
-   landmark_data( const landmark_data & l );
-     landmark_data & operator=( const landmark_data & );
+  private:
+    landmark_data( const landmark_data & l );
+      landmark_data & operator=( const landmark_data & );
 
- public:
-     landmark_data(  );
-    ~landmark_data(  );
+  public:
+      landmark_data(  );
+     ~landmark_data(  );
 
-   string description;  // Description of the landmark
-   int distance;  // Distance the landmark is visible from
-   short wmap;  // Map the landmark is on
-   short mx;   // X coordinate of landmark
-   short my;   // Y coordinate of landmark
-   bool Isdesc;   // If true is room desc. If not is landmark
+    string description;  // Description of the landmark
+    int distance;   // Distance the landmark is visible from
+    short wmap;     // Map the landmark is on
+    short mx;  // X coordinate of landmark
+    short my;  // Y coordinate of landmark
+    bool Isdesc;    // If true is room desc. If not is landmark
 };
 
 class mapexit_data
 {
- private:
-   mapexit_data( const mapexit_data & m );
-     mapexit_data & operator=( const mapexit_data & );
+  private:
+    mapexit_data( const mapexit_data & m );
+      mapexit_data & operator=( const mapexit_data & );
 
- public:
-     mapexit_data(  );
-    ~mapexit_data(  );
+  public:
+      mapexit_data(  );
+     ~mapexit_data(  );
 
-   string area;   // Area name
-   int vnum;   // Target vnum if it goes to a regular zone
-   short herex;   // Coordinates the entrance is at
-   short herey;
-   short therex;  // Coordinates the entrance goes to, if any
-   short therey;
-   short tomap;   // Map it goes to, if any
-   short onmap;   // Which map it's on
-   short prevsector; // Previous sector type to restore with when an exit is deleted
+    string area;    // Area name
+    int vnum;  // Target vnum if it goes to a regular zone
+    short herex;    // Coordinates the entrance is at
+    short herey;
+    short therex;   // Coordinates the entrance goes to, if any
+    short therey;
+    short tomap;    // Map it goes to, if any
+    short onmap;    // Which map it's on
+    short prevsector;    // Previous sector type to restore with when an exit is deleted
 };
 
 struct sect_color_type
 {
-   short sector;  // Terrain sector
-   const char *color;   // Color to display as
-   const char *symbol;  // Symbol you see for the sector
-   const char *desc; // Description of sector type
-   bool canpass;  // Impassable terrain
-   int move;   // Movement loss
-   short graph1;  // Color numbers for graphic conversion
-   short graph2;
-   short graph3;
+    short sector;   // Terrain sector
+    const char *color;   // Color to display as
+    const char *symbol;  // Symbol you see for the sector
+    const char *desc;    // Description of sector type
+    bool canpass;   // Impassable terrain
+    int move;  // Movement loss
+    short graph1;   // Color numbers for graphic conversion
+    short graph2;
+    short graph3;
 };
 
 extern list < mapexit_data * >mapexitlist;

@@ -91,40 +91,40 @@ extern int top_liquid;
 
 enum liquid_struct_types
 {
-   LIQTYPE_NORMAL, LIQTYPE_ALCOHOL, LIQTYPE_POISON, LIQTYPE_BLOOD, LIQTYPE_TOP
+    LIQTYPE_NORMAL, LIQTYPE_ALCOHOL, LIQTYPE_POISON, LIQTYPE_BLOOD, LIQTYPE_TOP
 };
 
 class liquid_data
 {
- private:
-   liquid_data( const liquid_data & l );
-     liquid_data & operator=( const liquid_data & );
+  private:
+    liquid_data( const liquid_data & l );
+      liquid_data & operator=( const liquid_data & );
 
- public:
-     liquid_data(  );
-    ~liquid_data(  );
+  public:
+      liquid_data(  );
+     ~liquid_data(  );
 
-   string name;
-   string shortdesc;
-   string color;
-   int mod[MAX_CONDS];
-   int vnum;
-   int type;
+    string name;
+    string shortdesc;
+    string color;
+    int mod[MAX_CONDS];
+    int vnum;
+    int type;
 };
 
 class mixture_data
 {
- private:
-   mixture_data( const mixture_data & m );
-     mixture_data & operator=( const mixture_data & );
+  private:
+    mixture_data( const mixture_data & m );
+      mixture_data & operator=( const mixture_data & );
 
- public:
-     mixture_data(  );
-    ~mixture_data(  );
+  public:
+      mixture_data(  );
+     ~mixture_data(  );
 
-   string name;
-   int data[3];
-   bool object;
+    string name;
+    int data[3];
+    bool object;
 };
 
 extern liquid_data *liquid_table[MAX_LIQUIDS];

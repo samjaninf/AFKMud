@@ -6,8 +6,8 @@ Dbserver       localhost~
 Dbname         dbname~
 Dbuser         dbuser~
 Dbpass         dbpass~
-Highplayers    1
-Highplayertime Sun Dec 10, 2006 1:14:17 AM PST~
+Highplayers    4
+Highplayertime Mon Jan 2, 2017 10:03:22 PM EST~
 CheckImmHost   1
 Nameresolving  0
 Waitforauth    0

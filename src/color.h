@@ -90,13 +90,13 @@ const int ALIGN_RIGHT = 3;
 #define BACK_GREY    "\033[47m"
 
 /* Other miscelaneous ANSI tags that can be used */
-#define ANSI_RESET      "\033[0m"   /* Reset to terminal default */
-#define ANSI_BOLD       "\033[1m"   /* For bright color stuff */
-#define ANSI_ITALIC     "\033[3m"   /* Italic text */
-#define ANSI_UNDERLINE  "\033[4m"   /* Underline text */
-#define ANSI_BLINK      "\033[5m"   /* Blinking text */
-#define ANSI_REVERSE    "\033[7m"   /* Reverse colors */
-#define ANSI_STRIKEOUT  "\033[9m"   /* Overstrike line */
+#define ANSI_RESET      "\033[0m"  /* Reset to terminal default */
+#define ANSI_BOLD       "\033[1m"  /* For bright color stuff */
+#define ANSI_ITALIC     "\033[3m"  /* Italic text */
+#define ANSI_UNDERLINE  "\033[4m"  /* Underline text */
+#define ANSI_BLINK      "\033[5m"  /* Blinking text */
+#define ANSI_REVERSE    "\033[7m"  /* Reverse colors */
+#define ANSI_STRIKEOUT  "\033[9m"  /* Overstrike line */
 
 const int AT_BLACK = 0;
 const int AT_BLOOD = 1;
@@ -126,7 +126,7 @@ const int AT_PURPLE_BLINK = AT_PURPLE + AT_BLINK; // 22
 const int AT_CYAN_BLINK = AT_CYAN + AT_BLINK;     // 23
 const int AT_GREY_BLINK = AT_GREY + AT_BLINK;     // 24
 const int AT_DGREY_BLINK = AT_DGREY + AT_BLINK;   // 25
-const int AT_RED_BLINK = AT_RED + AT_BLINK;       // 26
+const int AT_RED_BLINK = AT_RED + AT_BLINK;  // 26
 const int AT_GREEN_BLINK = AT_GREEN + AT_BLINK;   // 27
 const int AT_YELLOW_BLINK = AT_YELLOW + AT_BLINK; // 28
 const int AT_BLUE_BLINK = AT_BLUE + AT_BLINK;     // 29
@@ -180,39 +180,39 @@ const int AT_WARTALK = 75;
 const int AT_ARENA = 76;
 const int AT_MUSE = 77;
 const int AT_THINK = 78;
-const int AT_AFLAGS = 79;  /* Added by Samson 9-29-98 for area flag display line */
-const int AT_WHO = 80;  /* Added by Samson 9-29-98 for wholist */
+const int AT_AFLAGS = 79;     /* Added by Samson 9-29-98 for area flag display line */
+const int AT_WHO = 80;   /* Added by Samson 9-29-98 for wholist */
 const int AT_RACETALK = 81;   /* Added by Samson 9-29-98 for version 1.4 code */
-const int AT_IGNORE = 82;  /* Added by Samson 9-29-98 for version 1.4 code */
-const int AT_WHISPER = 83; /* Added by Samson 9-29-98 for version 1.4 code */
-const int AT_DIVIDER = 84; /* Added by Samson 9-29-98 for version 1.4 code */
-const int AT_MORPH = 85;   /* Added by Samson 9-29-98 for version 1.4 code */
-const int AT_SHOUT = 86;   /* Added by Samson 9-29-98 for shout channel */
-const int AT_RFLAGS = 87;  /* Added by Samson 12-20-98 for room flag display line */
-const int AT_STYPE = 88;   /* Added by Samson 12-20-98 for sector display line */
-const int AT_ANAME = 89;   /* Added by Samson 12-20-98 for filename display line */
-const int AT_AUCTION = 90; /* Added by Samson 12-25-98 for auction channel */
-const int AT_SCORE2 = 91;  /* Added by Samson 2-3-99 for DOTD code */
-const int AT_SCORE3 = 92;  /* Added by Samson 2-3-99 for DOTD code */
-const int AT_SCORE4 = 93;  /* Added by Samson 2-3-99 for DOTD code */
-const int AT_WHO2 = 94; /* Added by Samson 2-3-99 for DOTD code */
-const int AT_WHO3 = 95; /* Added by Samson 2-3-99 for DOTD code */
-const int AT_WHO4 = 96; /* Added by Samson 2-3-99 for DOTD code */
+const int AT_IGNORE = 82;     /* Added by Samson 9-29-98 for version 1.4 code */
+const int AT_WHISPER = 83;    /* Added by Samson 9-29-98 for version 1.4 code */
+const int AT_DIVIDER = 84;    /* Added by Samson 9-29-98 for version 1.4 code */
+const int AT_MORPH = 85; /* Added by Samson 9-29-98 for version 1.4 code */
+const int AT_SHOUT = 86; /* Added by Samson 9-29-98 for shout channel */
+const int AT_RFLAGS = 87;     /* Added by Samson 12-20-98 for room flag display line */
+const int AT_STYPE = 88; /* Added by Samson 12-20-98 for sector display line */
+const int AT_ANAME = 89; /* Added by Samson 12-20-98 for filename display line */
+const int AT_AUCTION = 90;    /* Added by Samson 12-25-98 for auction channel */
+const int AT_SCORE2 = 91;     /* Added by Samson 2-3-99 for DOTD code */
+const int AT_SCORE3 = 92;     /* Added by Samson 2-3-99 for DOTD code */
+const int AT_SCORE4 = 93;     /* Added by Samson 2-3-99 for DOTD code */
+const int AT_WHO2 = 94;  /* Added by Samson 2-3-99 for DOTD code */
+const int AT_WHO3 = 95;  /* Added by Samson 2-3-99 for DOTD code */
+const int AT_WHO4 = 96;  /* Added by Samson 2-3-99 for DOTD code */
 const int AT_INTERMUD = 97;   /* Added by Samson 1-15-01 for Intermud3 Channels */
-const int AT_HELP = 98; /* Added by Samson 1-15-01 for helpfiles */
-const int AT_WHO5 = 99; /* Added by Samson 2-7-01 for guild names on who */
-const int AT_SCORE5 = 100;  /* Added by Samson 1-14-02 */
-const int AT_WHO6 = 101;   /* Added by Samson 1-14-02 */
-const int AT_WHO7 = 102;   /* Added by Samson 1-14-02 */
-const int AT_PRAC = 103;   /* Added by Samson 1-21-02 */
-const int AT_PRAC2 = 104;  /* Added by Samson 1-21-02 */
-const int AT_PRAC3 = 105;  /* Added by Samson 1-21-02 */
-const int AT_PRAC4 = 106;  /* Added by Samson 1-21-02 */
-const int AT_unused = 107; /* Added by Samson 2-27-02 */
+const int AT_HELP = 98;  /* Added by Samson 1-15-01 for helpfiles */
+const int AT_WHO5 = 99;  /* Added by Samson 2-7-01 for guild names on who */
+const int AT_SCORE5 = 100;    /* Added by Samson 1-14-02 */
+const int AT_WHO6 = 101; /* Added by Samson 1-14-02 */
+const int AT_WHO7 = 102; /* Added by Samson 1-14-02 */
+const int AT_PRAC = 103; /* Added by Samson 1-21-02 */
+const int AT_PRAC2 = 104;     /* Added by Samson 1-21-02 */
+const int AT_PRAC3 = 105;     /* Added by Samson 1-21-02 */
+const int AT_PRAC4 = 106;     /* Added by Samson 1-21-02 */
+const int AT_unused = 107;    /* Added by Samson 2-27-02 */
 const int AT_GUILDTALK = 108; /* Added by Tarl 28 Nov 02 */
-const int AT_BOARD = 109;  /* Samson 10-14-03 */
-const int AT_BOARD2 = 110; /* Samson 10-14-03 */
-const int AT_BOARD3 = 111; /* Samson 10-14-03 */
+const int AT_BOARD = 109;     /* Samson 10-14-03 */
+const int AT_BOARD2 = 110;    /* Samson 10-14-03 */
+const int AT_BOARD3 = 111;    /* Samson 10-14-03 */
 
 /* Should ALWAYS be one more than the last numerical value in the list */
 const int MAX_COLORS = 112;

@@ -37,123 +37,123 @@ long events_served = 0;
 
 void free_event( event_info * e )
 {
-   eventlist.remove( e );
-   deleteptr( e );
+    eventlist.remove( e );
+    deleteptr( e );
 }
 
 void free_all_events( void )
 {
-   list < event_info * >::iterator e;
+    list < event_info * >::iterator e;
 
-   for( e = eventlist.begin(  ); e != eventlist.end(  ); )
-   {
-      event_info *ev = *e;
-      ++e;
+    for( e = eventlist.begin(  ); e != eventlist.end(  ); )
+    {
+        event_info *ev = *e;
+        ++e;
 
-      free_event( ev );
-   }
+        free_event( ev );
+    }
 }
 
 void add_event( time_t when, void ( *callback ) ( void * ), void *data )
 {
-   event_info *e;
-   list < event_info * >::iterator cur;
+    event_info *e;
+    list < event_info * >::iterator cur;
 
-   e = new event_info;
+    e = new event_info;
 
-   e->when = current_time + when;
-   e->callback = callback;
-   e->data = data;
+    e->when = current_time + when;
+    e->callback = callback;
+    e->data = data;
 
-   for( cur = eventlist.begin(  ); cur != eventlist.end(  ); ++cur )
-   {
-      if( ( *cur )->when > e->when )
-      {
-         eventlist.insert( cur, e );
-         return;
-      }
-   }
-   eventlist.push_back( e );
+    for( cur = eventlist.begin(  ); cur != eventlist.end(  ); ++cur )
+    {
+        if( ( *cur )->when > e->when )
+        {
+            eventlist.insert( cur, e );
+            return;
+        }
+    }
+    eventlist.push_back( e );
 }
 
 void cancel_event( void ( *callback ) ( void * ), void *data )
 {
-   list < event_info * >::iterator e;
+    list < event_info * >::iterator e;
 
-   for( e = eventlist.begin(  ); e != eventlist.end(  ); )
-   {
-      event_info *ev = *e;
-      ++e;
+    for( e = eventlist.begin(  ); e != eventlist.end(  ); )
+    {
+        event_info *ev = *e;
+        ++e;
 
-      if( ( !callback ) && ev->data == data )
-         free_event( ev );
+        if( ( !callback ) && ev->data == data )
+            free_event( ev );
 
-      else if( ( callback ) && ev->data == data && data != nullptr )
-         free_event( ev );
+        else if( ( callback ) && ev->data == data && data != nullptr )
+            free_event( ev );
 
-      else if( ev->callback == callback && data == nullptr )
-         free_event( ev );
-   }
+        else if( ev->callback == callback && data == nullptr )
+            free_event( ev );
+    }
 }
 
 event_info *find_event( void ( *callback ) ( void * ), void *data )
 {
-   list < event_info * >::iterator e;
+    list < event_info * >::iterator e;
 
-   for( e = eventlist.begin(  ); e != eventlist.end(  ); ++e )
-   {
-      event_info *ev = *e;
+    for( e = eventlist.begin(  ); e != eventlist.end(  ); ++e )
+    {
+        event_info *ev = *e;
 
-      if( ev->callback == callback && ev->data == data )
-         return ev;
-   }
-   return nullptr;
+        if( ev->callback == callback && ev->data == data )
+            return ev;
+    }
+    return nullptr;
 }
 
 time_t next_event( void ( *callback ) ( void * ), void *data )
 {
-   list < event_info * >::iterator e;
+    list < event_info * >::iterator e;
 
-   for( e = eventlist.begin(  ); e != eventlist.end(  ); ++e )
-   {
-      event_info *ev = *e;
+    for( e = eventlist.begin(  ); e != eventlist.end(  ); ++e )
+    {
+        event_info *ev = *e;
 
-      if( ev->callback == callback && ev->data == data )
-         return ev->when - current_time;
-   }
-   return -1;
+        if( ev->callback == callback && ev->data == data )
+            return ev->when - current_time;
+    }
+    return -1;
 }
 
 void run_events( time_t newtime )
 {
-   event_info *e;
-   void ( *callback ) ( void * );
-   void *data;
+    event_info *e;
+    void ( *callback ) ( void * );
+    void *data;
 
-   while( !eventlist.empty(  ) )
-   {
-      e = ( *eventlist.begin(  ) );
+    while( !eventlist.empty(  ) )
+    {
+        e = ( *eventlist.begin(  ) );
 
-      if( e->when > newtime )
-         break;
+        if( e->when > newtime )
+            break;
 
-      callback = e->callback;
-      data = e->data;
-      current_time = e->when;
+        callback = e->callback;
+        data = e->data;
+        current_time = e->when;
 
-      free_event( e );
-      ++events_served;
+        free_event( e );
+        ++events_served;
 
-      if( callback )
-         ( *callback ) ( data );
-      else
-         bug( "%s: nullptr callback", __func__ );
-   }
-   current_time = newtime;
+        if( callback )
+            ( *callback ) ( data );
+        else
+            bug( "%s: nullptr callback", __func__ );
+    }
+    current_time = newtime;
 }
 
 CMDF( do_eventinfo )
 {
-   ch->printf( "&BPending events&c: %zd\r\n", eventlist.size(  ) );
-   ch->printf( "&BEvents served &c: %ld\r\n", events_served );
+    ch->printf( "&BPending events&c: %zd\r\n", eventlist.size(  ) );
+    ch->printf( "&BEvents served &c: %ld\r\n", events_served );
 }

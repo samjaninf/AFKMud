@@ -53,30 +53,30 @@ const int CH_LVL_ADMIN = LEVEL_ADMIN;
  * Be sure to add new types into the update_connhistory function! */
 enum conn_hist_types
 {
-   CONNTYPE_LOGIN, CONNTYPE_QUIT, CONNTYPE_IDLE, CONNTYPE_LINKDEAD, CONNTYPE_NEWPLYR, CONNTYPE_RECONN
+    CONNTYPE_LOGIN, CONNTYPE_QUIT, CONNTYPE_IDLE, CONNTYPE_LINKDEAD, CONNTYPE_NEWPLYR, CONNTYPE_RECONN
 };
 
 /* conn history checking error codes */
 enum conn_hist_errors
 {
-   CHK_CONN_OK, CHK_CONN_REMOVED
+    CHK_CONN_OK, CHK_CONN_REMOVED
 };
 
 class conn_data
 {
- private:
-   conn_data( const conn_data & c );
-     conn_data & operator=( const conn_data & );
+  private:
+    conn_data( const conn_data & c );
+      conn_data & operator=( const conn_data & );
 
- public:
-     conn_data(  );
-    ~conn_data(  );
+  public:
+      conn_data(  );
+     ~conn_data(  );
 
-   string user;
-   string host;
-   string when;
-   int type;
-   int level;
-   int invis_lvl;
+    string user;
+    string host;
+    string when;
+    int type;
+    int level;
+    int invis_lvl;
 };
 #endif

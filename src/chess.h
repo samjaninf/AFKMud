@@ -31,17 +31,17 @@
 
 struct game_board_data
 {
-   ~game_board_data(  );
-   game_board_data(  );
+    ~game_board_data(  );
+    game_board_data(  );
 
 #ifdef IMC
-   char_data *imc_player;
+    char_data *imc_player;
 #endif
-   string player1;
-   string player2;
-   int board[8][8];
-   int turn;
-   int type;
+    string player1;
+    string player2;
+    int board[8][8];
+    int turn;
+    int type;
 };
 
 void free_game( game_board_data * );

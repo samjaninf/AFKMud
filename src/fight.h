@@ -31,13 +31,13 @@
 
 struct fighting_data
 {
-   char_data *who;
-   short timeskilled;
+    char_data *who;
+    short timeskilled;
 };
 
 struct hunt_hate_fear
 {
-   char_data *who;
-   char *name;
+    char_data *who;
+    char *name;
 };
 #endif

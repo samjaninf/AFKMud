@@ -30,12 +30,12 @@
 #define __NEWAUTH_H__
 
 #define AUTH_FILE SYSTEM_DIR "auth.dat"
-#define RESERVED_LIST SYSTEM_DIR "reserved.lst" /* List of reserved names  */
+#define RESERVED_LIST SYSTEM_DIR "reserved.lst"   /* List of reserved names  */
 
 /* New auth stuff --Rantic */
 enum auth_types
 {
-   AUTH_ONLINE, AUTH_OFFLINE, AUTH_LINK_DEAD, AUTH_CHANGE_NAME, AUTH_unused, AUTH_AUTHED
+    AUTH_ONLINE, AUTH_OFFLINE, AUTH_LINK_DEAD, AUTH_CHANGE_NAME, AUTH_unused, AUTH_AUTHED
 };
 
 int get_auth_state( char_data * ch );
@@ -46,17 +46,17 @@ int get_auth_state( char_data * ch );
 
 class auth_data
 {
- private:
-   auth_data( const auth_data & a );
-     auth_data & operator=( const auth_data & );
+  private:
+    auth_data( const auth_data & a );
+      auth_data & operator=( const auth_data & );
 
- public:
-     auth_data(  );
-    ~auth_data(  );
+  public:
+      auth_data(  );
+     ~auth_data(  );
 
-   string name;   // Name of character awaiting authorization
-   string authed_by; // Name of immortal who authorized the name
-   string change_by; // Name of immortal requesting name change
-   short state;   // Current state of authed
+    string name;    // Name of character awaiting authorization
+    string authed_by;    // Name of immortal who authorized the name
+    string change_by;    // Name of immortal requesting name change
+    short state;    // Current state of authed
 };
 #endif

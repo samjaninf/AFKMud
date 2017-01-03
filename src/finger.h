@@ -31,17 +31,17 @@
 
 class wizinfo_data
 {
- private:
-   wizinfo_data( const wizinfo_data & w );
-     wizinfo_data & operator=( const wizinfo_data & );
+  private:
+    wizinfo_data( const wizinfo_data & w );
+      wizinfo_data & operator=( const wizinfo_data & );
 
- public:
-    wizinfo_data(  );
-   ~wizinfo_data(  );
+  public:
+      wizinfo_data(  );
+     ~wizinfo_data(  );
 
-   string name;
-   string email;
-   string realm;
-   short level;
+    string name;
+    string email;
+    string realm;
+    short level;
 };
 #endif

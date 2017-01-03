@@ -38,12 +38,12 @@ const int MAX_TRADE = 5;
 
 struct shop_data
 {
-   int keeper; /* Vnum of shop keeper mob */
-   short buy_type[MAX_TRADE]; /* Item types shop will buy */
-   short profit_buy; /* Cost multiplier for buying */
-   short profit_sell;   /* Cost multiplier for selling */
-   short open_hour;  /* First opening hour */
-   short close_hour; /* First closing hour */
+    int keeper;     /* Vnum of shop keeper mob */
+    short buy_type[MAX_TRADE];     /* Item types shop will buy */
+    short profit_buy;    /* Cost multiplier for buying */
+    short profit_sell;   /* Cost multiplier for selling */
+    short open_hour;     /* First opening hour */
+    short close_hour;    /* First closing hour */
 };
 
 const int MAX_FIX = 3;
@@ -52,12 +52,12 @@ const int SHOP_RECHARGE = 2;
 
 struct repair_data
 {
-   int keeper; /* Vnum of shop keeper mob */
-   short fix_type[MAX_FIX];   /* Item types shop will fix */
-   short profit_fix; /* Cost multiplier for fixing */
-   short shop_type;  /* Repair shop type */
-   short open_hour;  /* First opening hour */
-   short close_hour; /* First closing hour */
+    int keeper;     /* Vnum of shop keeper mob */
+    short fix_type[MAX_FIX];  /* Item types shop will fix */
+    short profit_fix;    /* Cost multiplier for fixing */
+    short shop_type;     /* Repair shop type */
+    short open_hour;     /* First opening hour */
+    short close_hour;    /* First closing hour */
 };
 
 extern list < shop_data * >shoplist;

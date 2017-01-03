@@ -36,18 +36,18 @@
  */
 class smaug_affect
 {
- private:
-   smaug_affect( const smaug_affect& s );
-   smaug_affect& operator=( const smaug_affect& );
+  private:
+    smaug_affect( const smaug_affect & s );
+      smaug_affect & operator=( const smaug_affect & );
 
- public:
-   smaug_affect();
-   ~smaug_affect();
+  public:
+      smaug_affect(  );
+     ~smaug_affect(  );
 
-   char *duration;
-   char *modifier;
-   int bit;
-   short location;
+    char *duration;
+    char *modifier;
+    int bit;
+    short location;
 };
 
 #define SPELL_FLAG(skill, flag) ( (skill)->flags.test(flag) )
@@ -76,7 +76,7 @@ class smaug_affect
 
 enum save_types
 {
-   SS_NONE, SS_POISON_DEATH, SS_ROD_WANDS, SS_PARA_PETRI, SS_BREATH, SS_SPELL_STAFF
+    SS_NONE, SS_POISON_DEATH, SS_ROD_WANDS, SS_PARA_PETRI, SS_BREATH, SS_SPELL_STAFF
 };
 
 const int ALL_BITS = INT_MAX;
@@ -88,28 +88,28 @@ const int ALL_BITS = INT_MAX;
 
 enum spell_dam_types
 {
-   SD_NONE, SD_FIRE, SD_COLD, SD_ELECTRICITY, SD_ENERGY, SD_ACID, SD_POISON, SD_DRAIN
+    SD_NONE, SD_FIRE, SD_COLD, SD_ELECTRICITY, SD_ENERGY, SD_ACID, SD_POISON, SD_DRAIN
 };
 
 enum spell_act_types
 {
-   SA_NONE, SA_CREATE, SA_DESTROY, SA_RESIST, SA_SUSCEPT, SA_DIVINATE, SA_OBSCURE, SA_CHANGE
+    SA_NONE, SA_CREATE, SA_DESTROY, SA_RESIST, SA_SUSCEPT, SA_DIVINATE, SA_OBSCURE, SA_CHANGE
 };
 
 enum spell_power_types
 {
-   SP_NONE, SP_MINOR, SP_GREATER, SP_MAJOR
+    SP_NONE, SP_MINOR, SP_GREATER, SP_MAJOR
 };
 
 enum spell_class_types
 {
-   SC_NONE, SC_LUNAR, SC_SOLAR, SC_TRAVEL, SC_SUMMON, SC_LIFE, SC_DEATH, SC_ILLUSION
+    SC_NONE, SC_LUNAR, SC_SOLAR, SC_TRAVEL, SC_SUMMON, SC_LIFE, SC_DEATH, SC_ILLUSION
 };
 
 enum spell_save_effects
 {
-   SE_NONE, SE_NEGATE, SE_EIGHTHDAM, SE_QUARTERDAM, SE_HALFDAM, SE_3QTRDAM, SE_REFLECT, SE_ABSORB
+    SE_NONE, SE_NEGATE, SE_EIGHTHDAM, SE_QUARTERDAM, SE_HALFDAM, SE_3QTRDAM, SE_REFLECT, SE_ABSORB
 };
 
-extern list<smaug_affect*> saflist;
+extern list < smaug_affect * >saflist;
 #endif

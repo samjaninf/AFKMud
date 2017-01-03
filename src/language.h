@@ -34,31 +34,31 @@
  */
 class lcnv_data
 {
- private:
-   lcnv_data( const lcnv_data & l );
-     lcnv_data & operator=( const lcnv_data & );
+  private:
+    lcnv_data( const lcnv_data & l );
+      lcnv_data & operator=( const lcnv_data & );
 
- public:
-     lcnv_data(  );
+  public:
+      lcnv_data(  );
 
-   string old;
-   string lnew;
+    string old;
+    string lnew;
 };
 
 class lang_data
 {
- private:
-   lang_data( const lang_data & l );
-     lang_data & operator=( const lang_data & );
+  private:
+    lang_data( const lang_data & l );
+      lang_data & operator=( const lang_data & );
 
- public:
-     lang_data(  );
-    ~lang_data(  );
+  public:
+      lang_data(  );
+     ~lang_data(  );
 
-     list < lcnv_data * >prelist;
-     list < lcnv_data * >cnvlist;
-   string name;
-   string alphabet;
+      list < lcnv_data * >prelist;
+      list < lcnv_data * >cnvlist;
+    string name;
+    string alphabet;
 };
 
 extern list < lang_data * >langlist;

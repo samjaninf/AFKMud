@@ -40,7 +40,7 @@
 double distance( short, short, short, short );  /* For check_room */
 bool can_use_mprog( char_data * );
 
-const char *SPELL_SILENT_MARKER = "silent";  /* No OK. or Failed. */
+const char *SPELL_SILENT_MARKER = "silent"; /* No OK. or Failed. */
 extern int astral_target;
 
 /* New continent and plane based death relocation - Samson 3-29-98 */
@@ -48,63 +48,63 @@ extern int astral_target;
 // Right now it's pretty silly looking.
 room_index *check_room( char_data * ch, room_index * dieroom )
 {
-   room_index *location = nullptr;
+    room_index *location = nullptr;
 
-   if( dieroom->area->continent == ACON_ONE )
-      location = get_room_index( ROOM_VNUM_ALTAR );
+    if( dieroom->area->continent == ACON_ONE )
+        location = get_room_index( ROOM_VNUM_ALTAR );
 
-   if( !location )
-      location = get_room_index( ROOM_VNUM_ALTAR );
+    if( !location )
+        location = get_room_index( ROOM_VNUM_ALTAR );
 
-   return location;
+    return location;
 }
 
 room_index *recall_room( char_data * ch )
 {
-   room_index *location = nullptr;
+    room_index *location = nullptr;
 
-   if( ch->isnpc(  ) )
-   {
-      location = get_room_index( ROOM_VNUM_TEMPLE );
-      if( !location )
-         location = get_room_index( ROOM_VNUM_LIMBO );
-      return location;
-   }
+    if( ch->isnpc(  ) )
+    {
+        location = get_room_index( ROOM_VNUM_TEMPLE );
+        if( !location )
+            location = get_room_index( ROOM_VNUM_LIMBO );
+        return location;
+    }
 
-   if( ch->pcdata->clan )
-      location = get_room_index( ch->pcdata->clan->recall );
-   if( !location && ch->pcdata->home )
-      location = get_room_index( ch->pcdata->home );
+    if( ch->pcdata->clan )
+        location = get_room_index( ch->pcdata->clan->recall );
+    if( !location && ch->pcdata->home )
+        location = get_room_index( ch->pcdata->home );
 
-   if( !location )
-   {
-      if( ch->in_room->area->continent == ACON_ONE )
-      {
-         location = get_room_index( ch->pcdata->one );
+    if( !location )
+    {
+        if( ch->in_room->area->continent == ACON_ONE )
+        {
+            location = get_room_index( ch->pcdata->one );
 
-         if( !location )
-            location = get_room_index( ROOM_VNUM_TEMPLE );
-      }
+            if( !location )
+                location = get_room_index( ROOM_VNUM_TEMPLE );
+        }
 
-      if( ch->in_room->area->continent == ACON_ASTRAL )
-         location = get_room_index( astral_target );
-   }
-   if( !location && ch->pcdata->deity && ch->pcdata->deity->recallroom )
-      location = get_room_index( ch->pcdata->deity->recallroom );
+        if( ch->in_room->area->continent == ACON_ASTRAL )
+            location = get_room_index( astral_target );
+    }
+    if( !location && ch->pcdata->deity && ch->pcdata->deity->recallroom )
+        location = get_room_index( ch->pcdata->deity->recallroom );
 
-   if( !location )
-      location = get_room_index( ROOM_VNUM_TEMPLE );
+    if( !location )
+        location = get_room_index( ROOM_VNUM_TEMPLE );
 
-   /*
-    * Hey, look, if you get *THIS* damn far and still come up with nothing, you *DESERVE* to crash! 
-    */
-   if( !location )
-      location = get_room_index( ROOM_VNUM_LIMBO );
+    /*
+     * Hey, look, if you get *THIS* damn far and still come up with nothing, you *DESERVE* to crash! 
+     */
+    if( !location )
+        location = get_room_index( ROOM_VNUM_LIMBO );
 
-   return location;
+    return location;
 }
 
 bool beacon_check( char_data * ch, room_index * beacon )
 {
-   return true;
+    return true;
 }

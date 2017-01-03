@@ -29,9 +29,9 @@
 #ifndef __AREACONVERT_H__
 #define __AREACONVERT_H__
 
-const int AREA_STOCK_VERSION = 3;       // The current top version for stock Smaug files
+const int AREA_STOCK_VERSION = 3;  // The current top version for stock Smaug files
 const int AREA_SMAUGWIZ_VERSION = 1000; // The current top version for SmaugWiz files
-const int AREA_FUSS_VERSION = 1;        // The current top version for SmaugFUSS files
+const int AREA_FUSS_VERSION = 1;   // The current top version for SmaugFUSS files
 
 /* Extended bitvector matierial is now kept only for legacy purposes to convert old areas. */
 typedef struct extended_bitvector EXT_BV;
@@ -42,9 +42,9 @@ typedef struct extended_bitvector EXT_BV;
 #ifndef INTBITS
 const int INTBITS = 32;
 #endif
-const int XBM = 31;  /* extended bitmask   ( INTBITS - 1 )  */
-const int RSV = 5;   /* right-shift value  ( sqrt(XBM+1) )  */
-const int XBI = 4;   /* integers in an extended bitvector   */
+const int XBM = 31; /* extended bitmask   ( INTBITS - 1 )  */
+const int RSV = 5;  /* right-shift value  ( sqrt(XBM+1) )  */
+const int XBI = 4;  /* integers in an extended bitvector   */
 const int MAX_BITS = XBI * INTBITS;
 
 #define xIS_SET(var, bit) ((var).bits[(bit) >> RSV] & 1 << ((bit) & XBM))
@@ -54,7 +54,7 @@ const int MAX_BITS = XBI * INTBITS;
  */
 struct extended_bitvector
 {
-   unsigned int bits[XBI]; /* Needs to be unsigned to compile in Redhat 6 - Samson */
+    unsigned int bits[XBI];   /* Needs to be unsigned to compile in Redhat 6 - Samson */
 };
 
 EXT_BV fread_bitvector( FILE * );

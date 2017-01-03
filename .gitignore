@@ -1,3 +1,9 @@
+# object files
+src/o/*
+
+#build target
+src/afkmud
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -26,7 +32,7 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
 
 # Thumbnails
 ._*

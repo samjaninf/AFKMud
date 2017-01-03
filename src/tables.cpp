@@ -42,30 +42,30 @@ list < lang_data * >langlist;
 
 SPELL_FUN *spell_function( const string & name )
 {
-   void *funHandle;
+    void *funHandle;
 
-   funHandle = dlsym( sysdata->dlHandle, name.c_str(  ) );
-   if( dlerror(  ) )
-      return ( SPELL_FUN * ) spell_notfound;
+    funHandle = dlsym( sysdata->dlHandle, name.c_str(  ) );
+    if( dlerror(  ) )
+        return ( SPELL_FUN * ) spell_notfound;
 
-   return ( SPELL_FUN * ) funHandle;
+    return ( SPELL_FUN * ) funHandle;
 }
 
 DO_FUN *skill_function( const string & name )
 {
-   void *funHandle;
+    void *funHandle;
 
-   funHandle = dlsym( sysdata->dlHandle, name.c_str(  ) );
-   if( dlerror(  ) )
-      return ( DO_FUN * ) skill_notfound;
+    funHandle = dlsym( sysdata->dlHandle, name.c_str(  ) );
+    if( dlerror(  ) )
+        return ( DO_FUN * ) skill_notfound;
 
-   return ( DO_FUN * ) funHandle;
+    return ( DO_FUN * ) funHandle;
 }
 
 lcnv_data::lcnv_data(  )
 {
-   old.clear(  );
-   lnew.clear(  );
+    old.clear(  );
+    lnew.clear(  );
 }
 
 lang_data::lang_data(  )
@@ -74,39 +74,39 @@ lang_data::lang_data(  )
 
 lang_data::~lang_data(  )
 {
-   list < lcnv_data * >::iterator lcnv;
+    list < lcnv_data * >::iterator lcnv;
 
-   for( lcnv = prelist.begin(  ); lcnv != prelist.end(  ); )
-   {
-      lcnv_data *lpre = *lcnv;
-      ++lcnv;
+    for( lcnv = prelist.begin(  ); lcnv != prelist.end(  ); )
+    {
+        lcnv_data *lpre = *lcnv;
+        ++lcnv;
 
-      prelist.remove( lpre );
-      deleteptr( lpre );
-   }
+        prelist.remove( lpre );
+        deleteptr( lpre );
+    }
 
-   for( lcnv = cnvlist.begin(  ); lcnv != cnvlist.end(  ); )
-   {
-      lcnv_data *lc = *lcnv;
-      ++lcnv;
+    for( lcnv = cnvlist.begin(  ); lcnv != cnvlist.end(  ); )
+    {
+        lcnv_data *lc = *lcnv;
+        ++lcnv;
 
-      cnvlist.remove( lc );
-      deleteptr( lc );
-   }
-   langlist.remove( this );
+        cnvlist.remove( lc );
+        deleteptr( lc );
+    }
+    langlist.remove( this );
 }
 
 void free_tongues( void )
 {
-   list < lang_data * >::iterator ln;
+    list < lang_data * >::iterator ln;
 
-   for( ln = langlist.begin(  ); ln != langlist.end(  ); )
-   {
-      lang_data *lang = *ln;
-      ++ln;
+    for( ln = langlist.begin(  ); ln != langlist.end(  ); )
+    {
+        lang_data *lang = *ln;
+        ++ln;
 
-      deleteptr( lang );
-   }
+        deleteptr( lang );
+    }
 }
 
 /*
@@ -114,65 +114,65 @@ void free_tongues( void )
  */
 void fread_cnv( FILE * fp, lang_data * lng, bool pre )
 {
-   lcnv_data *cnv;
-   char letter;
+    lcnv_data *cnv;
+    char letter;
 
-   for( ;; )
-   {
-      letter = fread_letter( fp );
-      if( letter == '~' || letter == EOF )
-         break;
-      ungetc( letter, fp );
+    for( ;; )
+    {
+        letter = fread_letter( fp );
+        if( letter == '~' || letter == EOF )
+            break;
+        ungetc( letter, fp );
 
-      cnv = new lcnv_data;
-      cnv->old = fread_word( fp );
-      cnv->lnew = fread_word( fp );
-      fread_to_eol( fp );
-      if( pre )
-         lng->prelist.push_back( cnv );
-      else
-         lng->cnvlist.push_back( cnv );
-   }
+        cnv = new lcnv_data;
+        cnv->old = fread_word( fp );
+        cnv->lnew = fread_word( fp );
+        fread_to_eol( fp );
+        if( pre )
+            lng->prelist.push_back( cnv );
+        else
+            lng->cnvlist.push_back( cnv );
+    }
 }
 
 void load_tongues(  )
 {
-   FILE *fp;
-   lang_data *lng;
-   char *word;
-   char letter;
+    FILE *fp;
+    lang_data *lng;
+    char *word;
+    char letter;
 
-   if( !( fp = fopen( TONGUE_FILE, "r" ) ) )
-   {
-      perror( "Load_tongues" );
-      return;
-   }
-   for( ;; )
-   {
-      letter = fread_letter( fp );
-      if( letter == EOF )
-         break;
-      else if( letter == '*' )
-      {
-         fread_to_eol( fp );
-         continue;
-      }
-      else if( letter != '#' )
-      {
-         bug( "%s: Letter '%c' not #.", __func__, letter );
-         exit( 1 );
-      }
-      word = fread_word( fp );
-      if( !str_cmp( word, "end" ) )
-         break;
-      fread_to_eol( fp );
-      lng = new lang_data;
-      lng->name = word;
-      fread_cnv( fp, lng, true );
-      fread_string( lng->alphabet, fp );
-      fread_cnv( fp, lng, false );
-      fread_to_eol( fp );
-      langlist.push_back( lng );
-   }
-   FCLOSE( fp );
+    if( !( fp = fopen( TONGUE_FILE, "r" ) ) )
+    {
+        perror( "Load_tongues" );
+        return;
+    }
+    for( ;; )
+    {
+        letter = fread_letter( fp );
+        if( letter == EOF )
+            break;
+        else if( letter == '*' )
+        {
+            fread_to_eol( fp );
+            continue;
+        }
+        else if( letter != '#' )
+        {
+            bug( "%s: Letter '%c' not #.", __func__, letter );
+            exit( 1 );
+        }
+        word = fread_word( fp );
+        if( !str_cmp( word, "end" ) )
+            break;
+        fread_to_eol( fp );
+        lng = new lang_data;
+        lng->name = word;
+        fread_cnv( fp, lng, true );
+        fread_string( lng->alphabet, fp );
+        fread_cnv( fp, lng, false );
+        fread_to_eol( fp );
+        langlist.push_back( lng );
+    }
+    FCLOSE( fp );
 }

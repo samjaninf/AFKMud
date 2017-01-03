@@ -30,9 +30,9 @@
 // string rather than the binary value that std::less uses.
 class string_sort
 {
- public:
-   string_sort(  );
-   bool operator(  ) ( const string &, const string & );
+  public:
+    string_sort(  );
+    bool operator(  ) ( const string &, const string & );
 };
 
 typedef map < string, int, string_sort > SKILL_INDEX;
@@ -47,20 +47,20 @@ extern SKILL_INDEX skill_table__lore;
 
 class find__skill_prefix
 {
- public:
-   string value;
-   char_data *actor;
+  public:
+    string value;
+    char_data *actor;
 
-     find__skill_prefix( char_data *, const string & );
-   bool operator(  ) ( pair < string, int >compare );
+      find__skill_prefix( char_data *, const string & );
+    bool operator(  ) ( pair < string, int >compare );
 };
 
 class find__skill_exact
 {
- public:
-   string value;
-   char_data *actor;
+  public:
+    string value;
+    char_data *actor;
 
-     find__skill_exact( char_data *, const string & );
-   bool operator(  ) ( pair < string, int >compare );
+      find__skill_exact( char_data *, const string & );
+    bool operator(  ) ( pair < string, int >compare );
 };

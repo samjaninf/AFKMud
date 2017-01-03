@@ -34,48 +34,48 @@ const int MAX_CHANHISTORY = 20;
 
 enum channel_types
 {
-   CHAN_GLOBAL, CHAN_ZONE, CHAN_GUILD, CHAN_ROOM, CHAN_PK, CHAN_LOG
+    CHAN_GLOBAL, CHAN_ZONE, CHAN_GUILD, CHAN_ROOM, CHAN_PK, CHAN_LOG
 };
 
 enum channel_flags
 {
-   CHAN_KEEPHISTORY, CHAN_INTERPORT, CHAN_ALWAYSON, CHAN_MAXFLAG
+    CHAN_KEEPHISTORY, CHAN_INTERPORT, CHAN_ALWAYSON, CHAN_MAXFLAG
 };
 /* Interport flag will only operate when multiport code is active */
 
 class chan_history
 {
- private:
-   chan_history( const chan_history & m );
-     chan_history & operator=( const chan_history & );
+  private:
+    chan_history( const chan_history & m );
+      chan_history & operator=( const chan_history & );
 
- public:
-     chan_history(  );
-    ~chan_history(  );
+  public:
+      chan_history(  );
+     ~chan_history(  );
 
-   string name;
-   char *format;
-   time_t timestamp;
-   int level;
-   int invis;
+    string name;
+    char *format;
+    time_t timestamp;
+    int level;
+    int invis;
 };
 
 class mud_channel
 {
- private:
-   mud_channel( const mud_channel & m );
-     mud_channel & operator=( const mud_channel & );
+  private:
+    mud_channel( const mud_channel & m );
+      mud_channel & operator=( const mud_channel & );
 
- public:
-     mud_channel(  );
-    ~mud_channel(  );
+  public:
+      mud_channel(  );
+     ~mud_channel(  );
 
-     bitset < CHAN_MAXFLAG > flags;
-   string name;
-   string colorname;
-   list < chan_history * > history;
-   int level;
-   int type;
+      bitset < CHAN_MAXFLAG > flags;
+    string name;
+    string colorname;
+      list < chan_history * >history;
+    int level;
+    int type;
 };
 
 mud_channel *find_channel( const string & );

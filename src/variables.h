@@ -30,7 +30,7 @@ const int MAX_VAR_BITS = 128;
 
 enum variable_types
 {
-   vtNONE, vtINT, vtXBIT, vtSTR
+    vtNONE, vtINT, vtXBIT, vtSTR
 };
 
 /*
@@ -39,21 +39,21 @@ enum variable_types
  */
 struct variable_data
 {
-   variable_data( );
-   variable_data( int, int, const string& );
-    ~variable_data(  );
+    variable_data(  );
+    variable_data( int, int, const string & );
+     ~variable_data(  );
 
-   string tag; // Variable name
-   string varstring; // String data
-   bitset < MAX_VAR_BITS > varflags;
-   long vardata;     // long int value
-   time_t c_time;    // Time created
-   time_t m_time;    // Time last modified
-   time_t r_time;    // Time last read
-   time_t expires;   // Expiry date
-   int type;         // Variable type (string = 1, long int = 2, bits = 3)
-   int vnum;         // Vnum of mob that set this
-   int timer;        // Expiry timer
+    string tag;     // Variable name
+    string varstring;    // String data
+      bitset < MAX_VAR_BITS > varflags;
+    long vardata;   // long int value
+    time_t c_time;  // Time created
+    time_t m_time;  // Time last modified
+    time_t r_time;  // Time last read
+    time_t expires; // Expiry date
+    int type;  // Variable type (string = 1, long int = 2, bits = 3)
+    int vnum;  // Vnum of mob that set this
+    int timer; // Expiry timer
 };
 
 variable_data *get_tag( char_data *, const string &, int );

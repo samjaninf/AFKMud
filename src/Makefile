@@ -134,8 +134,8 @@ endif
 	@chmod g+w $(O_FILES)
 
 indent:
-	@indent -ts3 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli3 -bli0 -l175 -lp -i3 -cdb -c1 -cd1 -sc -pmt $(C_FILES) resolver.cpp
-	@indent -ts3 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli3 -bli0 -l175 -lp -i3 -cdb -c1 -cd1 -sc -pmt $(H_FILES)
+	@indent -ts4 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli4 -bli0 -l175 -lp -i4 -cdb -c1 -cd1 -sc -pmt $(C_FILES) resolver.cpp
+	@indent -ts5 -nut -nsaf -nsai -nsaw -npcs -npsl -ncs -nbc -bls -prs -bap -cbi0 -cli4 -bli0 -l175 -lp -i4 -cdb -c1 -cd1 -sc -pmt $(H_FILES)
 
 indentclean:
 	@rm *.cpp~ *.h~

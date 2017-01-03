@@ -36,42 +36,42 @@ const int MAX_OBJ_VALUE = 11; // This should always be one more than you actuall
  */
 class obj_index
 {
- private:
-   obj_index( const obj_index & o );
-     obj_index & operator=( const obj_index & );
+  private:
+    obj_index( const obj_index & o );
+      obj_index & operator=( const obj_index & );
 
- public:
-     obj_index(  );
-    ~obj_index(  );
+  public:
+      obj_index(  );
+     ~obj_index(  );
 
-   void clean_obj(  );
-   obj_data *create_object( int );
-   int set_ego(  );
-   void oprog_read_programs( FILE * );
+    void clean_obj(  );
+    obj_data *create_object( int );
+    int set_ego(  );
+    void oprog_read_programs( FILE * );
 
-     list < affect_data * >affects;
-     list < extra_descr_data * >extradesc;
-     list < struct mud_prog_data *>mudprogs; /* Mudprogs */
-   obj_index *next;
-   area_data *area;
-     bitset < MAX_PROG > progtypes; /* objprogs */
-     bitset < MAX_ITEM_FLAG > extra_flags;
-     bitset < MAX_WEAR_FLAG > wear_flags;
-   char *name;
-   char *short_descr;
-   char *objdesc;
-   char *action_desc;
-   char *socket[3];  /* Name of rune/gem the item has in each socket - Samson 3-31-02 */
-   int value[MAX_OBJ_VALUE];
-   int vnum;
-   int cost;
-   int ego;
-   int limit;  /* Limit on how many of these are allowed to load - Samson 1-9-00 */
-   short level;
-   short item_type;
-   short count;
-   short weight;
-   short layers;
+      list < affect_data * >affects;
+      list < extra_descr_data * >extradesc;
+      list < struct mud_prog_data *>mudprogs;     /* Mudprogs */
+    obj_index *next;
+    area_data *area;
+      bitset < MAX_PROG > progtypes;    /* objprogs */
+      bitset < MAX_ITEM_FLAG > extra_flags;
+      bitset < MAX_WEAR_FLAG > wear_flags;
+    char *name;
+    char *short_descr;
+    char *objdesc;
+    char *action_desc;
+    char *socket[3];     /* Name of rune/gem the item has in each socket - Samson 3-31-02 */
+    int value[MAX_OBJ_VALUE];
+    int vnum;
+    int cost;
+    int ego;
+    int limit; /* Limit on how many of these are allowed to load - Samson 1-9-00 */
+    short level;
+    short item_type;
+    short count;
+    short weight;
+    short layers;
 };
 
 extern map < int, obj_index * >obj_index_table;

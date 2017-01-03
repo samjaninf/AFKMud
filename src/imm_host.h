@@ -49,30 +49,30 @@ const int MAX_DOMAIN = 10;
 
 class immortal_host_log
 {
- private:
-   immortal_host_log( const immortal_host_log & i );
-     immortal_host_log & operator=( const immortal_host_log & );
+  private:
+    immortal_host_log( const immortal_host_log & i );
+      immortal_host_log & operator=( const immortal_host_log & );
 
- public:
-     immortal_host_log(  );
-    ~immortal_host_log(  );
+  public:
+      immortal_host_log(  );
+     ~immortal_host_log(  );
 
-   string host;
-   string date;
+    string host;
+    string date;
 };
 
 class immortal_host
 {
- private:
-   immortal_host( const immortal_host & i );
-     immortal_host & operator=( const immortal_host & );
+  private:
+    immortal_host( const immortal_host & i );
+      immortal_host & operator=( const immortal_host & );
 
- public:
-     immortal_host(  );
-    ~immortal_host(  );
+  public:
+      immortal_host(  );
+     ~immortal_host(  );
 
-     list < immortal_host_log * >loglist;
-   string domain[MAX_DOMAIN];
-   string name;
+      list < immortal_host_log * >loglist;
+    string domain[MAX_DOMAIN];
+    string name;
 };
 #endif

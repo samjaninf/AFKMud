@@ -28,7 +28,7 @@
 
 #include <dirent.h>
 #if !defined(WIN32)
-#include <dlfcn.h>   /* Required for libdl - Trax */
+#include <dlfcn.h>  /* Required for libdl - Trax */
 #else
 #include <windows.h>
 #define dlopen( libname, flags ) LoadLibrary( (libname) )
@@ -39,7 +39,7 @@ map < string, void *>module;
 
 bool registered_func( const char *func )
 {
-   return false;
+    return false;
 }
 
 void register_function( const char *name )
@@ -49,70 +49,70 @@ void register_function( const char *name )
 // Call up each module in the map and execute its initializer.
 void init_modules(  )
 {
-   map < string, void *>::iterator mod;
-   const char *error = nullptr;
+    map < string, void *>::iterator mod;
+    const char *error = nullptr;
 
-   while( mod != module.end(  ) )
-   {
-      typedef void INIT(  );
-      INIT *mod_init;
+    while( mod != module.end(  ) )
+    {
+        typedef void INIT(  );
+        INIT *mod_init;
 
-      mod_init = ( INIT * ) dlsym( mod->second, "module_init" );
-      if( ( error = dlerror(  ) ) )
-      {
-         log_printf( "Module entry failure: %s", error );
-         continue;
-      }
+        mod_init = ( INIT * ) dlsym( mod->second, "module_init" );
+        if( ( error = dlerror(  ) ) )
+        {
+            log_printf( "Module entry failure: %s", error );
+            continue;
+        }
 
-      // If this works, it should have fired off something.
-      mod_init(  );
-   }
+        // If this works, it should have fired off something.
+        mod_init(  );
+    }
 }
 
 void load_modules(  )
 {
-   DIR *dp;
-   struct dirent *dentry;
-   char directory_name[100];
+    DIR *dp;
+    struct dirent *dentry;
+    char directory_name[100];
 
-   return;  // castrated for now.
+    return; // castrated for now.
 
-   mudstrlcpy( directory_name, "../src/modules/so", 100 );
-   dp = opendir( directory_name );
-   dentry = readdir( dp );
-   while( dentry )
-   {
-      /*
-       * Added by Tarl 3 Dec 02 because we are now using CVS 
-       */
-      if( !str_cmp( dentry->d_name, "CVS" ) )
-      {
-         dentry = readdir( dp );
-         continue;
-      }
-      if( dentry->d_name[0] != '.' )
-      {
-         string filename = dentry->d_name;
-         string name;
-         string::size_type ps;
-         char path[100];
-
-         if( ( ps = filename.find( '.' ) ) == string::npos )
-            name = filename;
-         else
-            name = filename.substr( 0, ps );
-
-         snprintf( path, 100, "%s/%s", directory_name, name.c_str(  ) );
-         module[name] = dlopen( path, RTLD_NOW );
-         if( !module[name] )
-         {
-            log_string( dlerror(  ) );
+    mudstrlcpy( directory_name, "../src/modules/so", 100 );
+    dp = opendir( directory_name );
+    dentry = readdir( dp );
+    while( dentry )
+    {
+        /*
+         * Added by Tarl 3 Dec 02 because we are now using CVS 
+         */
+        if( !str_cmp( dentry->d_name, "CVS" ) )
+        {
+            dentry = readdir( dp );
             continue;
-         }
-      }
-      dentry = readdir( dp );
-   }
-   closedir( dp );
+        }
+        if( dentry->d_name[0] != '.' )
+        {
+            string filename = dentry->d_name;
+            string name;
+            string::size_type ps;
+            char path[100];
 
-   init_modules(  );
+            if( ( ps = filename.find( '.' ) ) == string::npos )
+                name = filename;
+            else
+                name = filename.substr( 0, ps );
+
+            snprintf( path, 100, "%s/%s", directory_name, name.c_str(  ) );
+            module[name] = dlopen( path, RTLD_NOW );
+            if( !module[name] )
+            {
+                log_string( dlerror(  ) );
+                continue;
+            }
+        }
+        dentry = readdir( dp );
+    }
+    closedir( dp );
+
+    init_modules(  );
 }

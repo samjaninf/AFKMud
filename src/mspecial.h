@@ -42,12 +42,12 @@ extern list < string > speclist;
  */
 
 /* Generic Mobs */
-SPECF( spec_janitor );  /* Scavenges trash */
-SPECF( spec_snake ); /* Poisons people with its bite */
-SPECF( spec_poison );   /* For area conversion compatibility - DON'T REMOVE THIS */
-SPECF( spec_fido );  /* Eats corpses */
-SPECF( spec_cast_adept );  /* For healer mobs */
-SPECF( spec_RustMonster ); /* Eats anything on the ground */
+SPECF( spec_janitor );   /* Scavenges trash */
+SPECF( spec_snake );     /* Poisons people with its bite */
+SPECF( spec_poison );    /* For area conversion compatibility - DON'T REMOVE THIS */
+SPECF( spec_fido ); /* Eats corpses */
+SPECF( spec_cast_adept );     /* For healer mobs */
+SPECF( spec_RustMonster );    /* Eats anything on the ground */
 SPECF( spec_wanderer );
 
 /* Generic Cityguards */
@@ -58,16 +58,16 @@ SPECF( spec_guard );
 SPECF( spec_GenericCitizen );
 
 /* Class Procs */
-SPECF( spec_warrior );  /* Warriors */
-SPECF( spec_thief ); /* Rogues */
-SPECF( spec_cast_mage );   /* Mages */
-SPECF( spec_cast_cleric ); /* Clerics */
-SPECF( spec_cast_undead ); /* Necromancers */
-SPECF( spec_ranger );   /* Rangers */
-SPECF( spec_paladin );  /* Paladins */
-SPECF( spec_druid ); /* Druids */
-SPECF( spec_antipaladin ); /* Antipaladins */
-SPECF( spec_bard );  /* Bards */
+SPECF( spec_warrior );   /* Warriors */
+SPECF( spec_thief );     /* Rogues */
+SPECF( spec_cast_mage ); /* Mages */
+SPECF( spec_cast_cleric );    /* Clerics */
+SPECF( spec_cast_undead );    /* Necromancers */
+SPECF( spec_ranger );    /* Rangers */
+SPECF( spec_paladin );   /* Paladins */
+SPECF( spec_druid );     /* Druids */
+SPECF( spec_antipaladin );    /* Antipaladins */
+SPECF( spec_bard ); /* Bards */
 
 /* Dragon stuff */
 SPECF( spec_breath_any );

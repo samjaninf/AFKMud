@@ -34,18 +34,18 @@
 
 class landing_data
 {
- private:
-   landing_data( const landing_data & l );
-     landing_data & operator=( const landing_data & );
+  private:
+    landing_data( const landing_data & l );
+      landing_data & operator=( const landing_data & );
 
- public:
-     landing_data(  );
-    ~landing_data(  );
+  public:
+      landing_data(  );
+     ~landing_data(  );
 
-   string area;
-   int cost;
-   short wmap;
-   short mx;
-   short my;
+    string area;
+    int cost;
+    short wmap;
+    short mx;
+    short my;
 };
 #endif

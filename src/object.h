@@ -34,90 +34,90 @@
  */
 class obj_data
 {
- private:
-   obj_data( const obj_data & o );
-     obj_data & operator=( const obj_data & );
+  private:
+    obj_data( const obj_data & o );
+      obj_data & operator=( const obj_data & );
 
- public:
-     obj_data(  );
-    ~obj_data(  );
+  public:
+      obj_data(  );
+     ~obj_data(  );
 
-   /*
-    * Internal refs in object.c 
-    */
-   void fall( bool );
-   short get_resistance(  );
-   const string oshort(  );
-   const string format_to_char( char_data *, bool, int );
-   obj_data *to_char( char_data * );
-   void from_char(  );
-   int apply_ac( int );
-   void from_room(  );
-   obj_data *to_room( room_index *, char_data * );
-   obj_data *to_obj( obj_data * );
-   void from_obj(  );
-   void extract(  );
-   int get_number(  );
-   int get_weight(  );
-   int get_real_weight(  );
-   const string item_type_name(  );
-   bool is_trapped(  );
-   obj_data *get_trap(  );
-   bool extracted(  );
-   obj_data *clone(  );
-   void split( int );
-   void separate(  );
-   bool empty( obj_data *, room_index * );
-   void remove_portal(  );
-   char_data *who_carrying(  );
-   bool in_magic_container(  );
-   void make_scraps(  );
-   int hitroll(  );
-   const string myobj(  );
+    /*
+     * Internal refs in object.c 
+     */
+    void fall( bool );
+    short get_resistance(  );
+    const string oshort(  );
+    const string format_to_char( char_data *, bool, int );
+    obj_data *to_char( char_data * );
+    void from_char(  );
+    int apply_ac( int );
+    void from_room(  );
+    obj_data *to_room( room_index *, char_data * );
+    obj_data *to_obj( obj_data * );
+    void from_obj(  );
+    void extract(  );
+    int get_number(  );
+    int get_weight(  );
+    int get_real_weight(  );
+    const string item_type_name(  );
+    bool is_trapped(  );
+    obj_data *get_trap(  );
+    bool extracted(  );
+    obj_data *clone(  );
+    void split( int );
+    void separate(  );
+    bool empty( obj_data *, room_index * );
+    void remove_portal(  );
+    char_data *who_carrying(  );
+    bool in_magic_container(  );
+    void make_scraps(  );
+    int hitroll(  );
+    const string myobj(  );
 
-   /*
-    * External refs in other files 
-    */
-   void armorgen(  );
-   void weapongen(  );
+    /*
+     * External refs in other files 
+     */
+    void armorgen(  );
+    void weapongen(  );
 
-     list < obj_data * >contents;   /* Objects this object contains */
-     list < affect_data * >affects;
-     list < extra_descr_data * >extradesc;
-     list < struct mprog_act_list *>mpact;   /* Mudprogs */
-   obj_data *in_obj;
-   obj_index *pIndexData;
-   room_index *in_room;
-   char_data *carried_by;
-     bitset < MAX_ITEM_FLAG > extra_flags;
-     bitset < MAX_WEAR_FLAG > wear_flags;
-   char *name;
-   char *short_descr;
-   char *objdesc;
-   char *action_desc;
-   char *owner;   /* Who owns this item? Used with personal flag for Sindhae prizes. */
-   char *seller;  /* Who put the item up for auction? */
-   char *buyer;   /* Who made the final bid on the item? */
-   char *socket[3];  /* Name of rune/gem the item has in each socket - Samson 3-31-02 */
-   int value[11]; /* Raised to 11 by Samson on 12-14-02 */
-   int bid; /* What was the amount of the final bid? */
-   int mpactnum;  /* mudprogs */
-   int ego;
-   int room_vnum; /* Track it's room vnum for hotbooting and such */
-   int cost;
-   short wear_loc;
-   short weight;
-   short level;
-   short timer;
-   short count;   /* support for object grouping */
-   short mx;   /* Object coordinates on overland maps - Samson 8-21-99 */
-   short my;
-   short wmap;  /* Which map is it on? - Samson 8-21-99 */
-   short day;  /* What day of the week was it offered or sold? */
-   short month;   /* What month? */
-   short year; /* What year? */
-   short item_type;
-   unsigned short mpscriptpos;
+      list < obj_data * >contents; /* Objects this object contains */
+      list < affect_data * >affects;
+      list < extra_descr_data * >extradesc;
+      list < struct mprog_act_list *>mpact;  /* Mudprogs */
+    obj_data *in_obj;
+    obj_index *pIndexData;
+    room_index *in_room;
+    char_data *carried_by;
+      bitset < MAX_ITEM_FLAG > extra_flags;
+      bitset < MAX_WEAR_FLAG > wear_flags;
+    char *name;
+    char *short_descr;
+    char *objdesc;
+    char *action_desc;
+    char *owner;    /* Who owns this item? Used with personal flag for Sindhae prizes. */
+    char *seller;   /* Who put the item up for auction? */
+    char *buyer;    /* Who made the final bid on the item? */
+    char *socket[3];     /* Name of rune/gem the item has in each socket - Samson 3-31-02 */
+    int value[11];  /* Raised to 11 by Samson on 12-14-02 */
+    int bid;   /* What was the amount of the final bid? */
+    int mpactnum;   /* mudprogs */
+    int ego;
+    int room_vnum;  /* Track it's room vnum for hotbooting and such */
+    int cost;
+    short wear_loc;
+    short weight;
+    short level;
+    short timer;
+    short count;    /* support for object grouping */
+    short mx;  /* Object coordinates on overland maps - Samson 8-21-99 */
+    short my;
+    short wmap;     /* Which map is it on? - Samson 8-21-99 */
+    short day; /* What day of the week was it offered or sold? */
+    short month;    /* What month? */
+    short year;     /* What year? */
+    short item_type;
+    unsigned short mpscriptpos;
 };
 
 obj_data *get_objtype( char_data *, short );

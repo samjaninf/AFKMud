@@ -57,68 +57,68 @@
  */
 size_t mudstrlcpy( char *dst, const char *src, size_t siz )
 {
-   register char *d = dst;
-   register const char *s = src;
-   register size_t n = siz;
+    register char *d = dst;
+    register const char *s = src;
+    register size_t n = siz;
 
-   /*
-    * Copy as many bytes as will fit 
-    */
-   if( n != 0 && --n != 0 )
-   {
-      do
-      {
-         if( ( *d++ = *s++ ) == 0 )
-            break;
-      }
-      while( --n != 0 );
-   }
+    /*
+     * Copy as many bytes as will fit 
+     */
+    if( n != 0 && --n != 0 )
+    {
+        do
+        {
+            if( ( *d++ = *s++ ) == 0 )
+                break;
+        }
+        while( --n != 0 );
+    }
 
-   /*
-    * Not enough room in dst, add NUL and traverse rest of src 
-    */
-   if( n == 0 )
-   {
-      if( siz != 0 )
-         *d = '\0';  /* NUL-terminate dst */
-      while( *s++ )
-         ;
-   }
-   return ( s - src - 1 ); /* count does not include NUL */
+    /*
+     * Not enough room in dst, add NUL and traverse rest of src 
+     */
+    if( n == 0 )
+    {
+        if( siz != 0 )
+            *d = '\0';  /* NUL-terminate dst */
+        while( *s++ )
+            ;
+    }
+    return ( s - src - 1 ); /* count does not include NUL */
 }
 
 char *resolve_address( int address )
 {
-   static char addr_str[256];
-   struct hostent *from;
+    static char addr_str[256];
+    struct hostent *from;
 
-   if( ( from = gethostbyaddr( ( char * )&address, sizeof( address ), AF_INET ) ) != nullptr )
-   {
-      mudstrlcpy( addr_str, strcmp( from->h_name, "localhost" ) ? from->h_name : "local-host", 256 );
-   }
-   else
-   {
-      int addr = ntohl( address );
-      snprintf( addr_str, 256, "%d.%d.%d.%d", ( addr >> 24 ) & 0xFF, ( addr >> 16 ) & 0xFF, ( addr >> 8 ) & 0xFF, ( addr ) & 0xFF );
-   }
-   return addr_str;
+    if( ( from = gethostbyaddr( ( char * )&address, sizeof( address ), AF_INET ) ) != nullptr )
+    {
+        mudstrlcpy( addr_str, strcmp( from->h_name, "localhost" ) ? from->h_name : "local-host", 256 );
+    }
+    else
+    {
+        int addr = ntohl( address );
+        snprintf( addr_str, 256, "%d.%d.%d.%d", ( addr >> 24 ) & 0xFF, ( addr >> 16 ) & 0xFF, ( addr >> 8 ) & 0xFF, ( addr ) & 0xFF );
+    }
+    return addr_str;
 }
 
 int main( int argc, char *argv[] )
 {
-   int ip;
-   char *address;
+    int ip;
+    char *address;
 
-   if( argc != 2 )
-   {
-      printf( "unknown.host\r\n" );
-      exit( 0 );
-   }
+    if( argc != 2 )
+    {
+        printf( "unknown.host\r\n" );
+        exit( 0 );
+    }
 
-   ip = atoi( argv[1] );
+    ip = atoi( argv[1] );
 
-   address = resolve_address( ip );
+    address = resolve_address( ip );
 
-   printf( "%s\r\n", address );
-   exit( 0 );
+    printf( "%s\r\n", address );
+    exit( 0 );
 }

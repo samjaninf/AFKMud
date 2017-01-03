@@ -34,8 +34,8 @@
  */
 enum command_flags
 {
-   CMD_POSSESS, CMD_POLYMORPHED, CMD_ACTION, CMD_NOSPAM, CMD_GHOST,
-   CMD_MUDPROG, CMD_NOFORCE, CMD_LOADED, CMD_NOABORT, MAX_CMD_FLAG
+    CMD_POSSESS, CMD_POLYMORPHED, CMD_ACTION, CMD_NOSPAM, CMD_GHOST,
+    CMD_MUDPROG, CMD_NOFORCE, CMD_LOADED, CMD_NOABORT, MAX_CMD_FLAG
 };
 
 /*
@@ -43,22 +43,22 @@ enum command_flags
  */
 class cmd_type
 {
- private:
-   cmd_type( const cmd_type & c );
-     cmd_type & operator=( const cmd_type & );
+  private:
+    cmd_type( const cmd_type & c );
+      cmd_type & operator=( const cmd_type & );
 
- public:
-     cmd_type(  );
-    ~cmd_type(  );
+  public:
+      cmd_type(  );
+     ~cmd_type(  );
 
-   string name;
-   string fun_name;  /* Added to hold the func name and dump some functions totally - Trax */
-   void *fileHandle;
-   DO_FUN *do_fun;
-     bitset < MAX_CMD_FLAG > flags; /* Added for Checking interpret stuff -Shaddai */
-   short position;
-   short level;
-   short log;
+    string name;
+    string fun_name;     /* Added to hold the func name and dump some functions totally - Trax */
+    void *fileHandle;
+    DO_FUN *do_fun;
+      bitset < MAX_CMD_FLAG > flags;    /* Added for Checking interpret stuff -Shaddai */
+    short position;
+    short level;
+    short log;
 };
 
 /*
@@ -66,32 +66,32 @@ class cmd_type
  */
 class social_type
 {
- private:
-   social_type( const social_type & s );
-     social_type & operator=( const social_type & );
+  private:
+    social_type( const social_type & s );
+      social_type & operator=( const social_type & );
 
- public:
-     social_type(  );
-    ~social_type(  );
+  public:
+      social_type(  );
+     ~social_type(  );
 
-   string name;
-   string char_no_arg;
-   string others_no_arg;
-   string char_found;
-   string others_found;
-   string vict_found;
-   string char_auto;
-   string others_auto;
-   string obj_self;
-   string obj_others;
-   short minposition;
+    string name;
+    string char_no_arg;
+    string others_no_arg;
+    string char_found;
+    string others_found;
+    string vict_found;
+    string char_auto;
+    string others_auto;
+    string obj_self;
+    string obj_others;
+    short minposition;
 };
 
 /*
  * Cmd flag names --Shaddai
  */
 extern const char *cmd_flags[];
-extern vector < vector < cmd_type * > >command_table;
+extern vector < vector < cmd_type * >>command_table;
 extern map < string, social_type * >social_table;
 
 cmd_type *find_command( const string & );
