@@ -107,37 +107,7 @@ string rankbuffer( char_data * ch )
 
 const string how_good( int percent )
 {
-    string buf = to_string( percent );
-    return buf;
-
-    if( percent < 0 )
-        buf = "impossible - tell an immortal!";
-    else if( percent == 0 )
-        buf = "Not Learned";
-    else if( percent <= 10 )
-        buf = "Awful";
-    else if( percent <= 20 )
-        buf = "Terrible";
-    else if( percent <= 30 )
-        buf = "Bad";
-    else if( percent <= 40 )
-        buf = "Poor";
-    else if( percent <= 55 )
-        buf = "Average";
-    else if( percent <= 60 )
-        buf = "Tolerable";
-    else if( percent <= 70 )
-        buf = "Fair";
-    else if( percent <= 80 )
-        buf = "Good";
-    else if( percent <= 85 )
-        buf = "Very Good";
-    else if( percent <= 90 )
-        buf = "Excellent";
-    else
-        buf = "Superb";
-
-    return buf;
+    return to_string( percent );
 }
 
 bool check_pets( char_data * ch, mob_index * pet )
@@ -311,21 +281,7 @@ CMDF( do_gold )
 /* Spits back a word for a stat being rolled or viewed in score - Samson 12-20-00 */
 const string attribtext( int attribute )
 {
-    string atext = to_string( attribute );
-    return atext;
-
-    if( attribute < 25 )
-        atext = "Excellent";
-    if( attribute < 17 )
-        atext = "Good";
-    if( attribute < 13 )
-        atext = "Fair";
-    if( attribute < 9 )
-        atext = "Poor";
-    if( attribute < 5 )
-        atext = "Bad";
-
-    return atext;
+    return to_string( attribute );
 }
 
 /* Return a string for weapon condition - Samson 3-01-02 */
@@ -1511,25 +1467,26 @@ void display_practice( char_data * ch, SKILL_INDEX * index, const char *header )
         ++cnt;
 
         // Output Skill
-        ch->pagerf( "%s%22s%s%s(%s%11s%s)", s2, skill->name,
-                    ( ch->level < skill->skill_level[ch->Class] && ch->level < skill->race_level[ch->race] ) ? "&W*" : " ",
-                    s1, s3, how_good( ch->pcdata->learned[sn] ).c_str(  ), s1 );
+        ch->pagerf(
+            "%s%22s%s%s",
+            s2,
+            skill->name,
+            ( ch->level < skill->skill_level[ch->Class] && ch->level < skill->race_level[ch->race] ) ? "&W*" : " ",
+            s1
+        );
 
         // Handle Columns
-        if( ( cnt % 2 ) == 0 )
+        if( ( cnt % 3 ) == 0 )
             ch->pager( "\r\n" );
     }
 
     // Add empty columns as necessary
-    if( ( cnt % 2 ) )
+    if( ( cnt % 3 ) )
         ch->pager( "\r\n" );
 }
 
 CMDF( do_practice )
 {
-    char buf[MSL];
-    list < char_data * >::iterator ich;
-
     if( ch->isnpc(  ) )
         return;
 
@@ -1550,8 +1507,7 @@ CMDF( do_practice )
     display_practice( ch, &skill_table__tongue, "%s---------------------------------[ %sTongues %s]-----------------------------------\r\n" );
     display_practice( ch, &skill_table__lore, "%s---------------------------------[ %sLores   %s]-----------------------------------\r\n" );
 
-    ch->pager( "&W*&D Indicates a skill you have not acheived the required level for yet.\r\n" );
-    ch->pagerf( "%sYou have %s%d %spractice sessions left.\r\n", s1, s4, ch->pcdata->practice, s1 );
+    ch->pager( "\r\n&W*&D Indicates a skill you have not acheived the required level for yet.\r\n" );
     return;
 }
 

@@ -31,6 +31,7 @@
 #include "area.h"
 #include "bits.h"
 #include "boards.h"
+#include "clans.h"
 #include "deity.h"
 #include "descriptor.h"
 #include "fight.h"
@@ -41,6 +42,7 @@
 #include "polymorph.h"
 #include "raceclass.h"
 #include "roomindex.h"
+#include "skill_index.h"
 #include "variables.h"
 
 list < char_data * >charlist;
@@ -57,6 +59,7 @@ void free_fight( char_data * );
 void queue_extracted_char( char_data *, bool );
 room_index *check_room( char_data *, room_index * );
 void update_room_reset( char_data *, bool );
+void assign_skills( char_data *, SKILL_INDEX * );
 
 extern list < rel_data * >relationlist;
 
@@ -3798,7 +3801,7 @@ void stop_fearing( char_data * ch )
 void advance_level( char_data * ch )
 {
     char buf[MSL];
-    int add_hp, add_mana, add_prac, manamod = 0, manahighdie, manaroll;
+    int add_hp, add_mana, manamod = 0, manahighdie, manaroll;
 
     snprintf( buf, MSL, "the %s", title_table[ch->Class][ch->level][ch->sex] );
     ch->set_title( buf );
@@ -3842,15 +3845,12 @@ void advance_level( char_data * ch )
 
     add_mana = ( manaroll * manamod ) / 10;
 
-    add_prac = 4 + wis_app[ch->get_curr_wis(  )].practice;
-
     add_hp = UMAX( 1, add_hp );
 
     add_mana = UMAX( 1, add_mana );
 
     ch->max_hit += add_hp;
     ch->max_mana += add_mana;
-    ch->pcdata->practice += add_prac;
 
     STRFREE( ch->pcdata->rank );
     ch->pcdata->rank = STRALLOC( class_table[ch->Class]->who_name );
@@ -3863,10 +3863,45 @@ void advance_level( char_data * ch )
         interpret( ch, "help M_ADVHERO_" );
     }
     if( ch->level < LEVEL_IMMORTAL )
-        ch->printf( "&WYour gain is: %d hp, %d mana, %d prac.\r\n", add_hp, add_mana, add_prac );
+        ch->printf( "&WYour gain is: %d hp, %d mana.\r\n", add_hp, add_mana );
 
     ch->ClassSpecificStuff(  ); /* Brought over from DOTD code - Samson 4-6-99 */
+    assign_skills(ch, &skill_table__index);
     ch->save(  );
+}
+
+void assign_skills( char_data * ch, SKILL_INDEX * index )
+{
+	// Auto gain any new skills
+    SKILL_INDEX::iterator it, end;
+    int sn;
+    skill_type *skill;
+
+    it = index->begin(  );
+    end = index->end(  );
+
+    for( ; it != end; ++it )
+    {
+        sn = it->second;
+
+        // Invalid SN
+        if( sn < 1 || sn >= MAX_SKILL )
+            continue;
+
+        // Null skill
+        if( !( skill = skill_table[sn] ) )
+            continue;
+
+        if( ch->level < skill_table[sn]->skill_level[ch->Class] && ch->level < skill_table[sn]->race_level[ch->race] )
+            continue;
+
+        // Guild only skills
+        if( !ch->is_immortal(  ) && ( skill_table[sn]->guild != CLASS_NONE && ( !IS_GUILDED( ch ) ) ) )
+            continue;
+
+        ch->pcdata->learned[sn] = 100;
+        ch->printf("You can now use [%s].\r\n", skill->name);
+	}
 }
 
 void char_data::gain_exp( double gain )
