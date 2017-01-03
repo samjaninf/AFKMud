@@ -2914,7 +2914,6 @@ ch_ret damage( char_data * ch, char_data * victim, double dam, int dt )
             dam += 5;   /* add penalty for bare skin! */
     }
 
-    dam /= 8;
     if( ch != victim )
         dam_message( ch, victim, ( int ) dam, dt, nullptr );
 

@@ -56,12 +56,12 @@ IPADDR::IPADDR( const string & ip )
     _decimal = ntohl( addr.s_addr );
 }
 
-const IPADDR::decimal_t & IPADDR::decimal(  ) const const
+const IPADDR::decimal_t & IPADDR::decimal(  ) const
 {
     return _decimal;
 }
 
-const char *IPADDR::str(  ) const const
+const char *IPADDR::str(  ) const
 {
     struct in_addr addr;
 
@@ -92,7 +92,7 @@ CIDR::CIDR( const string & cidr )
     _upper = _lower + ( ::pow( 2, 32 - p ) - 1 );
 }
 
-inline bool CIDR::overlaps( const CIDR & c ) const const
+inline bool CIDR::overlaps( const CIDR & c ) const
 {
     if( c.lower(  ) >= _lower && c.lower(  ) <= _upper )
         return true;
