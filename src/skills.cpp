@@ -1272,7 +1272,6 @@ skill_type *fread_skill( FILE * fp, int version )
             case 'R':
                 KEY( "Range", skill->range, fread_number( fp ) );
                 KEY( "Rounds", skill->beats, fread_number( fp ) );
-                KEY( "Rent", skill->ego, fread_number( fp ) );
                 if( !str_cmp( word, "Race" ) )
                 {
                     int race = fread_number( fp );

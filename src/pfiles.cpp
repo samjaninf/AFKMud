@@ -42,9 +42,7 @@ int num_quotes; /* for quotes */
 
 void prune_sales(  );
 void remove_from_auth( const string & );
-void rare_update(  );
 void save_timedata(  );
-void adjust_pfile( const string & );
 
 /* Globals */
 time_t new_pfile_time_t;
@@ -507,7 +505,6 @@ void search_pfiles( char_data * ch, const char *dirname, const char *filename, i
                             if( !( get_obj_index( vnum ) ) )
                             {
                                 bug( "Bad obj vnum in %s: %d", __func__, vnum );
-                                adjust_pfile( filename );
                             }
                             else
                             {
@@ -918,7 +915,6 @@ CMDF( do_pfiles )
 
         log_printf( "Manual pfile cleanup started by %s.", ch->name );
         pfile_scan( false );
-        rare_update(  );
         return;
     }
 
@@ -970,8 +966,6 @@ void check_pfiles( time_t reset )
             if( ( system( buf ) ) )
             {
                 log_string( "Error during Pfile backup. Cleanup code aborted. Skipping to rare items update." );
-                if( reset == 0 )
-                    rare_update(  );
             }
             else
             {
@@ -979,8 +973,6 @@ void check_pfiles( time_t reset )
                 save_timedata(  );
                 log_string( "Automated pfile cleanup beginning...." );
                 pfile_scan( false );
-                if( reset == 0 )
-                    rare_update(  );
             }
         }
         else
@@ -989,8 +981,6 @@ void check_pfiles( time_t reset )
             save_timedata(  );
             log_string( "Counting pfiles....." );
             pfile_scan( true );
-            if( reset == 0 )
-                rare_update(  );
         }
     }
 }

@@ -99,8 +99,6 @@ void medit_parse( descriptor_data *, string & );
 void redit_parse( descriptor_data *, string & );
 void board_parse( descriptor_data *, const string & );
 bool check_immortal_domain( char_data *, const string & );
-void scan_rares( char_data * );
-void break_camp( char_data * );
 void setup_newbie( char_data *, bool );
 void sale_count( char_data * ); /* For new auction system - Samson 6-24-99 */
 void check_clan_info( char_data * );
@@ -2570,10 +2568,6 @@ void char_to_game( char_data * ch )
     if( ch->has_pcflag( PCFLAG_CHECKBOARD ) )
         interpret( ch, "checkboards" );
 
-    if( ch->pcdata->camp == 1 )
-        break_camp( ch );
-    else
-        scan_rares( ch );
     ch->pcdata->daysidle = 0;
 
     ch->pcdata->lasthost = ch->desc->hostname;

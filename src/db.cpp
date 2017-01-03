@@ -171,7 +171,6 @@ void load_banlist(  );
 void update_timers(  );
 void update_calendar(  );
 void load_specfuns(  );
-void load_equipment_totals( bool );
 void load_slays(  );
 void load_holidays(  );
 void load_bits(  );
@@ -2088,8 +2087,6 @@ void boot_db( bool fCopyOver )
     load_clans(  );
     load_realms(  );
     load_deity(  );
-
-    load_equipment_totals( fCopyOver ); /* Samson 10-16-98 - scans pfiles for rares */
 
     log_string( "Loading corpses..." );
     load_corpses(  );

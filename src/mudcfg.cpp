@@ -80,10 +80,7 @@ room_index *recall_room( char_data * ch )
     {
         if( ch->in_room->area->continent == ACON_ONE )
         {
-            location = get_room_index( ch->pcdata->one );
-
-            if( !location )
-                location = get_room_index( ROOM_VNUM_TEMPLE );
+            location = get_room_index( ROOM_VNUM_TEMPLE );
         }
 
         if( ch->in_room->area->continent == ACON_ASTRAL )

@@ -136,7 +136,6 @@ class pc_data
     int home;
     int balance;    /* Bank balance - Samson */
     int exgold;     /* Extragold affect - Samson */
-    int one;   /* Last room they rented in on primary continent - Samson 12-20-00 */
     int spam;  /* How many times have they triggered the spamguard? - 3-18-01 */
     int timezone;
     int version;    /* Temporary variable to track pfile password conversion */
@@ -146,7 +145,6 @@ class pc_data
     short favor;    /* deity favor */
     short practice;
     short pagerlen; /* For pager (NOT menus) */
-    short camp;     /* Did the player camp or rent? Samson 9-19-98 */
     short colors[MAX_COLORS]; /* Custom color codes - Samson 9-28-98 */
     short beacon[MAX_BEACONS];     /* For beacon spell, recall points - Samson 2-7-99 */
     short charmies; /* Number of Charmies */

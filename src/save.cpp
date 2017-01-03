@@ -276,11 +276,6 @@ void fwrite_char( char_data * ch, FILE * fp )
      */
     fprintf( fp, "Coordinates  %d %d %d\n", ch->mx, ch->my, ch->wmap );
     fprintf( fp, "SavingThrows %d %d %d %d %d\n", ch->saving_poison_death, ch->saving_wand, ch->saving_para_petri, ch->saving_breath, ch->saving_spell_staff );
-    fprintf( fp, "RentData     %d %d 0 0 %d\n", ch->pcdata->balance, ch->pcdata->daysidle, ch->pcdata->camp );
-    /*
-     * Recall code update to recall to last inn rented at - Samson 12-20-00 
-     */
-    fprintf( fp, "RentRooms    %d\n", ch->pcdata->one );
 
     if( ch->has_bparts(  ) )
         fprintf( fp, "BodyParts    %s~\n", bitset_string( ch->get_bparts(  ), part_flags ) );
@@ -1426,26 +1421,6 @@ void fread_char( char_data * ch, FILE * fp, bool preload, bool copyover )
                 }
                 KEY( "Rank", ch->pcdata->rank, fread_string( fp ) );
 
-                if( !str_cmp( word, "RentData" ) )
-                {
-                    line = fread_line( fp );
-                    x1 = x2 = x3 = x4 = x5 = 0;
-                    sscanf( line, "%d %d %d %d %d", &x1, &x2, &x3, &x4, &x5 );
-                    ch->pcdata->balance = x1;
-                    ch->pcdata->daysidle = x2;
-                    ch->pcdata->camp = x5;
-                    break;
-                }
-
-                if( !str_cmp( word, "RentRooms" ) )
-                {
-                    line = fread_line( fp );
-                    x1 = ROOM_VNUM_TEMPLE;
-                    sscanf( line, "%d", &x1 );
-                    ch->pcdata->one = x1;
-                    break;
-                }
-
                 if( !str_cmp( word, "Regens" ) )
                 {
                     line = fread_line( fp );
@@ -2083,7 +2058,6 @@ void fread_obj( char_data * ch, FILE * fp, short os_type )
                 break;
 
             case 'R':
-                KEY( "Rent", obj->ego, fread_number( fp ) );    /* Samson 5-8-99 - OLD FIELD */
                 KEY( "Room", room, get_room_index( fread_number( fp ) ) );
                 KEY( "Rvnum", obj->room_vnum, fread_number( fp ) ); /* hotboot tracker */
                 break;

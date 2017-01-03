@@ -66,7 +66,6 @@ CMDF( do_help );
 CMDF( do_mfind );
 CMDF( do_ofind );
 CMDF( do_bestow );
-void rent_adjust_pfile( const string & );
 bool in_arena( char_data * );
 void check_stored_objects( char_data *, int );
 void remove_from_auth( const string & );

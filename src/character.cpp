@@ -113,7 +113,6 @@ pc_data::pc_data(  )
     this->condition[COND_FULL] = ( int )( sysdata->maxcondval * .75 );
     this->pagerlen = 24;
     this->secedit = SECT_OCEAN; /* Initialize Map OLC sector - Samson 8-1-99 */
-    this->one = ROOM_VNUM_TEMPLE;
     this->lasthost = "Unknown-Host";
     this->logon = current_time;
     this->timezone = -1;

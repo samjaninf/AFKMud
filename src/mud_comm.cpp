@@ -3946,11 +3946,6 @@ void setup_newbie( char_data * ch, bool NEWLOGIN )
     ch->pcdata->age = 17;
     ch->pcdata->age_bonus = 0;
 
-    /*
-     * Set recall point - Samson 5-13-01
-     */
-    ch->pcdata->one = ROOM_VNUM_TEMPLE;
-
     ch->max_hit = 10;
     ch->hit = ch->max_hit;
 
