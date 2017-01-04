@@ -1713,55 +1713,118 @@ CMDF( do_attrib )
 
 CMDF( do_score )
 {
-    char s1[16], s2[16], s3[16], s4[16], s5[16];
+    char cScore[16], cBorder[16], cLow[16], cHigh[16], cLabel[16];
 
-    snprintf( s1, 16, "%s", ch->color_str( AT_SCORE ) );
-    snprintf( s2, 16, "%s", ch->color_str( AT_SCORE2 ) );
-    snprintf( s3, 16, "%s", ch->color_str( AT_SCORE3 ) );
-    snprintf( s4, 16, "%s", ch->color_str( AT_SCORE4 ) );
-    snprintf( s5, 16, "%s", ch->color_str( AT_SCORE5 ) );
+    snprintf( cScore, 16, "%s", ch->color_str( AT_SCORE ) );
+    snprintf( cBorder, 16, "%s", ch->color_str( AT_SCORE2 ) );
+    snprintf( cLow, 16, "%s", ch->color_str( AT_SCORE3 ) );
+    snprintf( cHigh, 16, "%s", ch->color_str( AT_SCORE4 ) );
+    snprintf( cLabel, 16, "%s", ch->color_str( AT_SCORE5 ) );
 
-    ch->printf( "%sScore for %s%s\r\n", s1, ch->name, ch->pcdata->title );
-    ch->printf( "%s--------------------------------------------------------------------------------\r\n", s5 );
+    ch->printf( "\r\n%s=================================================================================\r\n", cBorder );
+    ch->printf(
+        "%sRace: %s%-12s %sClass: %slvl %d %-12s %sAge: %s%d %s(played %s%ld%s hours)\r\n",
+        cLabel, cScore, ch->get_race(  ),
+        cLabel, cScore, ch->level, ch->get_class(  ),
+        cLabel, cScore, ch->get_age(  ),
+        cLabel, cScore, ch->time_played(  ), cLabel
+    );
+    ch->printf( "%s=================================================================================\r\n", cBorder );
 
-    ch->printf( "%sLevel: %s%-15d %sHitPoints: %s%5d%s/%s%5d      %sPager    %s(%s%s%s) %s%4d\r\n",
-                s2, s3, ch->level, s2, s3, ch->hit, s1, s4, ch->max_hit, s2, s1, s3, ch->has_pcflag( PCFLAG_PAGERON ) ? "X" : " ", s1, s4, ch->pcdata->pagerlen );
+    int hr = ch->GET_HITROLL(  );
+    ch->printf( "%s       Align: %s%-10d%s   Bonus To Hit: %s%s%-9d\r\n",
+        cLabel, ch->alignment < 0 ? cLow : (ch->alignment > 0 ? cHigh : cScore), ch->alignment,
+        cLabel, hr > 0 ? cScore : cLow, hr > 0 ? "+" : "", hr
+    );
 
-    ch->printf( "%sRace : %s%-15.15s %sMana     : %s%5d%s/%s%5d      %sAutoexit %s(%s%s%s)\r\n",
-                s2, s3, capitalize( npc_race[ch->race] ), s2, s3, ch->mana, s1, s4, ch->max_mana, s2, s1, s3, ch->has_pcflag( PCFLAG_AUTOEXIT ) ? "X" : " ", s1 );
+    int dr = ch->GET_DAMROLL(  ), cstr = ch->get_curr_str(  ), pstr = ch->perm_str;
+    ch->printf( "%s    Strength: %s%-2d%s/%s%-10d%sBonus To Dam: %s%s%-9d\r\n",
+        cLabel,
+        cstr < pstr ? cLow : (cstr > pstr ? cHigh : cScore), cstr,
+        cLabel, cScore, pstr,
+        cLabel, dr > 0 ? cScore : cLow, dr > 0 ? "+" : "", dr
+    );
 
-    ch->printf( "%sClass: %s%-15.15s %sMovement : %s%5d%s/%s%5d      %sAutoloot %s(%s%s%s)\r\n",
-                s2, s3, capitalize( npc_class[ch->Class] ), s2, s3, ch->move, s1, s4, ch->max_move, s2, s1, s3, ch->has_pcflag( PCFLAG_AUTOLOOT ) ? "X" : " ", s1 );
+    int ac = ch->GET_AC(  ), cint = ch->get_curr_int(  ), pint = ch->perm_int;
+    ch->printf( "%sIntelligence: %s%-2d%s/%s%-12d%s     Armor: %s%s%-8d\r\n",
+        cLabel,
+        cint < pint ? cLow : (cint > pint ? cHigh : cScore), cint,
+        cLabel, cScore, pint,
+        cLabel, ac > 0 ? cScore : cLow, ac > 0 ? "+" : "", ac
+    );
 
-    ch->printf( "%sAlign: %s%-15d %sTo Hit   : %s%s%-9d       %sAutosac  %s(%s%s%s)\r\n",
-                s2, s3, ch->alignment, s2, s3, ch->GET_HITROLL(  ) > 0 ? "+" : "", ch->GET_HITROLL(  ), s2, s1, s3, ch->has_pcflag( PCFLAG_AUTOSAC ) ? "X" : " ", s1 );
+    int cwis = ch->get_curr_wis(  ), pwis = ch->perm_wis;
+    ch->printf( "%s      Wisdom: %s%-2d%s/%s%-12d\r\n",
+        cLabel,
+        cwis < pwis ? cLow : (cwis > pwis ? cHigh : cScore), cwis,
+        cLabel, cScore, pwis
+    );
 
-    ch->printf( "%sSTR  : %s%-2d%s/%s%-12d %sTo Dam   : %s%s%-9d       %sSmartsac %s(%s%s%s)\r\n",
-                s2, s3, ch->get_curr_str(  ), s1, s4, ch->perm_str, s2, s3, ch->GET_DAMROLL(  ) > 0 ? "+" : " ",
-                ch->GET_DAMROLL(  ), s2, s1, s3, ch->has_pcflag( PCFLAG_SMARTSAC ) ? "X" : " ", s1 );
+    int cdex = ch->get_curr_dex(  ), pdex = ch->perm_dex;
+    ch->printf( "%s   Dexterity: %s%-2d%s/%s%-12d%sExperience: %s%d\r\n",
+        cLabel,
+        cdex < pdex ? cLow : (cdex > pdex ? cHigh : cScore), cdex,
+        cLabel, cScore, pdex,
+        cLabel, cScore, ch->exp
+    );
 
-    ch->printf( "%sINT  : %s%-2d%s/%s%-12d %sAC       : %s%s%d\r\n",
-                s2, s3, ch->get_curr_int(  ), s1, s4, ch->perm_int, s2, s3, ch->GET_AC(  ) > 0 ? "+" : "", ch->GET_AC(  ) );
+    int ccon = ch->get_curr_con(  ), pcon = ch->perm_con;
+    ch->printf( "%sConstitution: %s%-2d%s/%s%-12d%s      Gold: %s%d\r\n",
+        cLabel,
+        ccon < pcon ? cLow : (ccon > pcon ? cHigh : cScore), ccon,
+        cLabel, cScore, pcon,
+        cLabel, cScore, ch->gold
+    );
 
-    ch->printf( "%sWIS  : %s%-2d%s/%s%-12d %sWimpy    : %s%d\r\n", s2, s3, ch->get_curr_wis(  ), s1, s4, ch->perm_wis, s2, s3, ch->wimpy );
+    int ccha = ch->get_curr_cha(  ), pcha = ch->perm_cha, carry = ch->carry_number, capacity = ch->can_carry_n(  );
+    ch->printf( "%s    Charisma: %s%-2d%s/%s%-12d%s     Items: %s%d%s/%s%d\r\n",
+        cLabel,
+        ccha < pcha ? cLow : (ccha > pcha ? cHigh : cScore), ccha,
+        cLabel, cScore, pcha,
+        cLabel, carry > capacity * 0.6 ? cLow : cScore, carry,
+        cLabel, cScore, capacity
+    );
 
-    ch->printf( "%sDEX  : %s%-2d%s/%s%-12d %sExp      : %s%d\r\n", s2, s3, ch->get_curr_dex(  ), s1, s4, ch->perm_dex, s2, s3, ch->exp );
+    int clck = ch->get_curr_lck(  ), plck = ch->perm_lck;
+    ch->printf( "%s        Luck: %s%-2d%s/%s%-12d\r\n",
+        cLabel,
+        clck < plck ? cLow : (clck > plck ? cHigh : cScore), clck,
+        cLabel, cScore, plck
+    );
 
-    ch->printf( "%sCON  : %s%-2d%s/%s%-12d %sGold     : %s%d\r\n", s2, s3, ch->get_curr_con(  ), s1, s4, ch->perm_con, s2, s3, ch->gold );
+    ch->printf( "%s       Favor: %s%d\r\n\r\n", cLabel, cScore, ch->pcdata->favor );
 
-    ch->printf( "%sCHA  : %s%-15.15s %sItems    : %s%d%s/%s%d\r\n",
-                s2, s3, attribtext( ch->get_curr_cha(  ) ).c_str(  ), s2, s3, ch->carry_number, s1, s4, ch->can_carry_n(  ) );
+    if( !ch->affects.empty(  ) )
+    {
+        skill_type *sktmp;
+        list < affect_data * >::iterator paf;
+        char buf[MSL];
 
-    ch->printf( "%sLCK  : %s%-15.15s\r\n", s2, s3, attribtext( ch->get_curr_lck(  ) ).c_str(  ) );
+        ch->printf( "%s=================================================================================\r\n", cBorder );
+        ch->printf( "%sAffect Data:\r\n\r\n", cScore );
 
-    ch->printf( "%sPracs: %s%-15d %sFavor    : %s%d\r\n\r\n", s2, s3, ch->pcdata->practice, s2, s3, ch->pcdata->favor );
+        for( paf = ch->affects.begin(  ); paf != ch->affects.end(  ); ++paf )
+        {
+            affect_data *af = *paf;
 
-    ch->printf( "%sYou are %s.\r\n", s2, npc_position[ch->position] );
+            if( !( sktmp = get_skilltype( af->type ) ) )
+                continue;
+
+            snprintf( buf, MSL, "%s'%s%s%s'", cScore, cLow, sktmp->name, cScore );
+
+            ch->printf( "%s%s : %-20s %s(%s%d hours%s)\r\n", cScore, skill_tname[sktmp->type], buf, cScore, cHigh, af->duration / ( int )DUR_CONV, cScore );
+        }
+    }
+
+    ch->printf( "%s=================================================================================\r\n", cBorder );
+
+
+    ch->printf( "%sYou are %s.\r\n", cScore, npc_position[ch->position] );
 
     if( ch->pcdata->condition[COND_DRUNK] > 10 )
-        ch->printf( "%sYou are drunk.\r\n", s2 );
+        ch->printf( "%sYou are drunk.\r\n", cScore );
 
-    ch->set_color( AT_SCORE2 );
+    ch->set_color( AT_SCORE );
     if( ch->position != POS_SLEEPING )
     {
         switch ( ch->mental_state / 10 )
@@ -1846,58 +1909,40 @@ CMDF( do_score )
             ch->print( "You are in deep slumber.\r\n" );
     }
 
+    /* Disabled in lieu of do_term command
     if( ch->desc )
     {
-        ch->printf( "\r\n%sTerminal Support Detected: MCCP%s[%s%s%s] %sMSP%s[%s%s%s]\r\n",
-                    s2, s1, s3, ( ch->desc->can_compress ? "X" : " " ), s1, s2, s1, s3, ( ch->desc->msp_detected ? "X" : " " ), s1 );
+        ch->printf( "%sTerminal Support Detected: MCCP%s[%s%s%s] %sMSP%s[%s%s%s]\r\n",
+                    cScore, cScore, cLow, ( ch->desc->can_compress ? "X" : " " ), cScore, cScore, cScore, cLow, ( ch->desc->msp_detected ? "X" : " " ), cScore );
 
         ch->printf( "%sTerminal Support In Use  : MCCP%s[%s%s%s] %sMSP%s[%s%s%s]\r\n",
-                    s2, s1, s3, ( ch->desc->can_compress ? "X" : " " ), s1, s2, s1, s3, ( ch->MSP_ON(  )? "X" : " " ), s1 );
+                    cScore, cScore, cLow, ( ch->desc->can_compress ? "X" : " " ), cScore, cScore, cScore, cLow, ( ch->MSP_ON(  )? "X" : " " ), cScore );
     }
+    */
 
     if( !ch->pcdata->bestowments.empty(  ) )
-        ch->printf( "\r\n%sYou are bestowed with the command(s): %s%s.\r\n", s2, s3, ch->pcdata->bestowments.c_str(  ) );
+        ch->printf( "%sYou are bestowed with the command(s): %s%s.\r\n", cScore, cLow, ch->pcdata->bestowments.c_str(  ) );
 
     if( ch->is_immortal(  ) )
     {
-        ch->printf( "\r\n%s--------------------------------------------------------------------------------\r\n", s5 );
+        ch->printf( "%s=================================================================================\r\n", cBorder );
 
         ch->printf( "%sIMMORTAL DATA: Wizinvis %s(%s%s%s) %sLevel %s(%s%d%s) %sRealm: %s(%s%s%s)\r\n",
-                    s2, s1, s3, ch->has_pcflag( PCFLAG_WIZINVIS ) ? "X" : " ", s1, s2, s1, s3, ch->pcdata->wizinvis, s1, s2, s1, s3, ch->pcdata->realm_name.c_str(  ), s1 );
+                    cScore, cScore, cLow, ch->has_pcflag( PCFLAG_WIZINVIS ) ? "X" : " ", cScore, cScore, cScore, cLow, ch->pcdata->wizinvis, cScore, cScore, cScore, cLow, ch->pcdata->realm_name.c_str(  ), cScore );
 
-        ch->printf( "%sBamfin:  %s%s\r\n", s2, s1, ( ch->pcdata->bamfin && ch->pcdata->bamfin[0] != '\0' ) ? ch->pcdata->bamfin : "appears in a swirling mist." );
-        ch->printf( "%sBamfout: %s%s\r\n", s2, s1, ( ch->pcdata->bamfout && ch->pcdata->bamfout[0] != '\0' ) ? ch->pcdata->bamfout : "leaves in a swirling mist." );
+        ch->printf( "%sBamfin:  %s%s\r\n", cScore, cScore, ( ch->pcdata->bamfin && ch->pcdata->bamfin[0] != '\0' ) ? ch->pcdata->bamfin : "appears in a swirling mist." );
+        ch->printf( "%sBamfout: %s%s\r\n", cScore, cScore, ( ch->pcdata->bamfout && ch->pcdata->bamfout[0] != '\0' ) ? ch->pcdata->bamfout : "leaves in a swirling mist." );
 
         /*
          * Area Loaded info - Scryn 8/11
          */
         if( ch->pcdata->area )
         {
-            ch->printf( "%sVnums: %s%-5.5d - %-5.5d\r\n", s2, s1, ch->pcdata->area->low_vnum, ch->pcdata->area->hi_vnum );
+            ch->printf( "%sVnums: %s%-5.5d - %-5.5d\r\n", cScore, cScore, ch->pcdata->area->low_vnum, ch->pcdata->area->hi_vnum );
         }
     }
 
-    if( !ch->affects.empty(  ) )
-    {
-        skill_type *sktmp;
-        list < affect_data * >::iterator paf;
-        char buf[MSL];
-
-        ch->printf( "\r\n%s--------------------------------------------------------------------------------\r\n", s5 );
-        ch->printf( "%sAffect Data:\r\n\r\n", s2 );
-
-        for( paf = ch->affects.begin(  ); paf != ch->affects.end(  ); ++paf )
-        {
-            affect_data *af = *paf;
-
-            if( !( sktmp = get_skilltype( af->type ) ) )
-                continue;
-
-            snprintf( buf, MSL, "%s'%s%s%s'", s1, s3, sktmp->name, s1 );
-
-            ch->printf( "%s%s : %-20s %s(%s%d hours%s)\r\n", s2, skill_tname[sktmp->type], buf, s1, s4, af->duration / ( int )DUR_CONV, s1 );
-        }
-    }
+    ch->printf( "%s=================================================================================\r\n", cBorder );
 }
 
 obj_data *find_quill( char_data * ch )

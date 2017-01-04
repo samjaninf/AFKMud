@@ -89,9 +89,9 @@ const char *pc_displays[MAX_COLORS] = {
     "muse", "think", "aflags", "who",   // 80
     "racetalk", "ignore", "whisper", "divider", // 84
     "morph", "shout", "rflags", "stype",    // 88
-    "aname", "auction", "score2", "score3", // 92
-    "score4", "who2", "who3", "who4",   // 96
-    "intermud", "helpfiles", "who5", "score5",  // 100
+    "aname", "auction", "score_border", "score_low", // 92
+    "score_high", "who2", "who3", "who4",   // 96
+    "intermud", "helpfiles", "who5", "score_label",  // 100
     "who6", "who7", "prac", "prac2",    // 104
     "prac3", "prac4", "UNUSED", "guildtalk",    // 108
     "board", "board2", "board3" // 111
@@ -109,23 +109,23 @@ const short default_set[MAX_COLORS] = {
     AT_DGREY_BLINK, AT_RED_BLINK, AT_GREEN_BLINK, AT_YELLOW_BLINK,  /* 28 */
     AT_BLUE_BLINK, AT_PINK_BLINK, AT_LBLUE_BLINK, AT_WHITE_BLINK,   /* 32 */
     AT_GREY, AT_GREY, AT_BLUE,  /* 35 */
-    AT_GREEN, AT_LBLUE, AT_WHITE, AT_GREY,  /* 36 */
-    AT_GREY, AT_YELLOW, AT_GREY, AT_GREY,   /* 43 */
+    AT_YELLOW, AT_RED, AT_LBLUE, AT_GREY,  /* 37 */
+    AT_BLOOD, AT_YELLOW, AT_RED, AT_RED,   /* 44 */
     AT_RED_BLINK, AT_BLUE, AT_GREY, AT_GREY,    /* 47 */
-    AT_DGREEN, AT_CYAN, AT_GREY, AT_GREY,   /* 51 */
-    AT_BLUE, AT_GREY, AT_GREY, AT_GREY, /* 55 */
-    AT_RED, AT_GREY, AT_BLUE, AT_PINK,  /* 59 */
-    AT_GREY, AT_GREY, AT_YELLOW, AT_GREY,   /* 63 */
+    AT_DGREEN, AT_CYAN, AT_BLOOD, AT_RED,   /* 52 */
+    AT_BLUE, AT_GREY, AT_GREY, AT_WHITE, /* 55 */
+    AT_WHITE, AT_GREY, AT_PURPLE, AT_CYAN,  /* 61 */
+    AT_GREY, AT_GREY, AT_YELLOW, AT_GREEN,   /* 65 */
     AT_GREY, AT_ORANGE, AT_BLUE, AT_RED,    /* 67 */
-    AT_GREY, AT_GREY, AT_GREEN, AT_DGREEN,  /* 71 */
+    AT_GREY, AT_GREY, AT_GREY, AT_GREY,  /* 72 */
     AT_DGREEN, AT_ORANGE, AT_GREY, AT_RED,  /* 75 */
     AT_GREY, AT_DGREEN, AT_RED, AT_BLUE,    /* 79 */
     AT_RED, AT_CYAN, AT_YELLOW, AT_PINK,    /* 83 */
     AT_DGREEN, AT_PINK, AT_WHITE, AT_BLUE,  /* 87 */
-    AT_BLUE, AT_BLUE, AT_GREEN, AT_GREY,    /* 91 */
-    AT_GREEN, AT_GREEN, AT_YELLOW, AT_DGREY,    /* 95 */
+    AT_BLUE, AT_BLUE, AT_GREEN, AT_DGREEN,    /* 92 */
+    AT_RED, AT_GREEN, AT_YELLOW, AT_DGREY,    /* 96 */
     AT_GREEN, AT_PINK, AT_DGREEN, AT_CYAN,  /* 99 */
-    AT_RED, AT_WHITE, AT_BLUE, AT_DGREEN,   /* 103 */
+    AT_GREEN, AT_WHITE, AT_BLUE, AT_DGREEN,   /* 103 */
     AT_CYAN, AT_BLOOD, AT_RED, AT_DGREEN,   /* 107 */
     AT_GREEN, AT_GREY, AT_GREEN, AT_WHITE   /* 111 */
 };
@@ -186,28 +186,28 @@ void show_colors( char_data * ch )
 
     for( count = 0; count < 16; ++count )
     {
-        if( ( count % 8 ) == 0 && count != 0 )
+        if( ( count % 4 ) == 0 && count != 0 )
             ch->pager( "\r\n" );
-        ch->pagerf( "%s%-10s", ch->color_str( count ), pc_displays[count] );
+        ch->pagerf( "%s%-20s", ch->color_str( count ), pc_displays[count] );
     }
 
     ch->pager( "\r\n\r\n&W******************************[ COLOR TYPES ]******************************\r\n" );
 
     for( count = 33; count < MAX_COLORS; ++count )
     {
-        if( ( count % 8 ) == 0 && count != 33 )
+        if( ( count % 4 ) == 0 && count != 33 )
             ch->pager( "\r\n" );
-        ch->pagerf( "%s%-10s%s", ch->color_str( count ), pc_displays[count], ANSI_RESET );
+        ch->pagerf( "%s%-20s%s", ch->color_str( count ), pc_displays[count], ANSI_RESET );
     }
     ch->pager( "\r\n\r\n" );
     ch->pager( "&YAvailable colors are:\r\n" );
 
     for( count = 0; valid_color[count][0] != '\0'; ++count )
     {
-        if( ( count % 8 ) == 0 && count != 0 )
+        if( ( count % 4 ) == 0 && count != 0 )
             ch->pager( "\r\n" );
 
-        ch->pagerf( "%s%-10s", ch->color_str( AT_PLAIN ), valid_color[count] );
+        ch->pagerf( "%s%-20s", ch->color_str( AT_PLAIN ), valid_color[count] );
     }
     ch->pager( "\r\n\r\n" );
     show_colorthemes( ch );

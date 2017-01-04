@@ -525,14 +525,6 @@ void show_map( char_data * ch, char *text )
     buf[0] = '\0';
 
     /*
-     * Show exits 
-     */
-    if( ch->has_pcflag( PCFLAG_AUTOEXIT ) )
-        snprintf( buf, MSL * 2, "%s%s", ch->color_str( AT_EXITS ), get_exits( ch ) );
-    else
-        mudstrlcpy( buf, "", MSL * 2 );
-
-    /*
      * Top of map frame 
      */
     mudstrlcat( buf, "&z+-----------+&w ", MSL * 2 );

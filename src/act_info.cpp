@@ -1226,6 +1226,12 @@ CMDF( do_look )
             return;
         }
 
+        if( !ch->has_pcflag( PCFLAG_BRIEF ) && !ch->has_pcflag( PCFLAG_COMPASS ) )
+        {
+            ch->print( "\r\n--------------------------------------------------------------------------------\r\n" );
+        }
+
+
         /*
          * 'look' or 'look auto' 
          */
@@ -1233,14 +1239,6 @@ CMDF( do_look )
             print_compass( ch );
         else
             print_roomname( ch );
-
-        /*
-         * Moved the exits to be under the name of the room 
-         * Yannick 24 september 1997                        
-         * Added AUTOMAP check because it shows them next to the map now if its active 
-         */
-        if( ch->has_pcflag( PCFLAG_AUTOEXIT ) && !ch->has_pcflag( PCFLAG_AUTOMAP ) )
-            do_exits( ch, "auto" );
 
         print_infoflags( ch );
 
@@ -1255,6 +1253,9 @@ CMDF( do_look )
 
         show_list_to_char( ch, ch->in_room->objects, false, false );
         show_char_to_char( ch );
+
+        if( ch->has_pcflag( PCFLAG_AUTOEXIT ) )
+            do_exits( ch, "auto" );
         return;
     }
 
