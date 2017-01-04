@@ -51,7 +51,6 @@ extern bool bootlock;
 extern int control;
 extern int num_logins;
 
-void quotes( char_data * );
 void set_alarm( long );
 bool write_to_descriptor_old( int, const char * );
 void update_room_reset( char_data *, bool );
@@ -902,7 +901,6 @@ void hotboot_recover( void )
 
             if( d->character->level < LEVEL_IMMORTAL )
                 ++sysdata->playersonline;
-            quotes( d->character );
             check_auth_state( d->character );   /* new auth */
         }
     }

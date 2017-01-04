@@ -127,7 +127,6 @@ void free_connhistory( int );   /* connhist.c */
 void free_immhosts(  );
 void free_mssp_info( void );
 void free_morphs(  );
-void free_quotes(  );
 void free_envs(  );
 void free_sales(  );
 void free_bans(  );
@@ -1028,9 +1027,6 @@ void cleanup_memory( void )
     free_imcdata( true );
     imc_delete_info(  );
 #endif
-
-    fprintf( stdout, "%s", "Quote List.\n" );
-    free_quotes(  );
 
     fprintf( stdout, "%s", "Random Environment Data.\n" );
     free_envs(  );

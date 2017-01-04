@@ -48,7 +48,6 @@ auth_data *get_auth_name( const string & );
 void check_pfiles( time_t );
 void update_connhistory( descriptor_data *, int );
 void show_stateflags( char_data * );
-void quotes( char_data * );
 
 void char_leaving( char_data * ch, int howleft )
 {
@@ -99,7 +98,6 @@ void char_leaving( char_data * ch, int howleft )
         obj_data *obj = *iobj;
         ++iobj;
     }
-    quotes( ch );
     quitting_char = ch;
     ch->save(  );
 

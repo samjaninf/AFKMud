@@ -103,7 +103,6 @@ void setup_newbie( char_data *, bool );
 void sale_count( char_data * ); /* For new auction system - Samson 6-24-99 */
 void check_clan_info( char_data * );
 void name_stamp_stats( char_data * );
-void quotes( char_data * );
 void reset_colors( char_data * );
 void mprog_login_trigger( char_data * );
 void rprog_login_trigger( char_data * );
@@ -2357,7 +2356,6 @@ void show_status( char_data * ch )
         log_printf_plus( LOG_COMM, LEVEL_IMMORTAL, "MCCP support detected for %s.", ch->name );
     if( ch->desc->msp_detected )
         log_printf_plus( LOG_COMM, LEVEL_IMMORTAL, "MSP support detected for %s.", ch->name );
-    quotes( ch );
     show_stateflags( ch );
 }
 
@@ -2582,8 +2580,6 @@ void char_to_game( char_data * ch )
      */
     if( ch->has_pcflag( PCFLAG_ONMAP ) )
         ch->music( "wilderness.mid", 100, false );
-
-    quotes( ch );
 
     if( ch->tempnum > 0 )
     {

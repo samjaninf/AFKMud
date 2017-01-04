@@ -163,7 +163,6 @@ void load_world(  );
 void load_morphs(  );
 void load_skill_table(  );
 void remap_slot_numbers(  );
-void load_quotes(  );
 void load_sales(  );    /* Samson 6-24-99 for new auction system */
 void load_aucvaults(  );    /* Samson 6-20-99 for new auction system */
 void load_corpses(  );
@@ -2152,8 +2151,6 @@ void boot_db( bool fCopyOver )
 
     log_string( "Loading Projects..." );
     load_projects(  );
-
-    load_quotes(  );
 
     log_string( "Loading login messages..." );
     load_loginmsg(  );
