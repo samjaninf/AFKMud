@@ -1131,6 +1131,28 @@ CMDF( do_drop )
         ch->save(  );   /* duping protector */
 }
 
+CMDF( do_identify )
+{
+    string arg1;
+    obj_data *obj;
+
+    argument = one_argument( argument, arg1 );
+    if( arg1.empty(  ) )
+    {
+        ch->print( "Identify what?\r\n" );
+        return;
+    }
+
+    if( !( obj = ch->get_obj_carry( arg1 ) ) )
+    {
+        ch->print( "You do not have that item.\r\n" );
+        return;
+    }
+
+    ch->printf( "[%s]\r\n", obj->short_descr );
+    obj_identify_output( ch, obj );
+}
+
 CMDF( do_give )
 {
     string arg1, arg2;

@@ -948,20 +948,6 @@ CMDF( do_bug )
     tybuid( ch, argument, 0 );
 }
 
-CMDF( do_ide )
-{
-    ch->print( "&YIf you want to send an idea, type 'idea <message>'.\r\n" );
-    ch->print( "If you want to identify an object, use the identify spell.\r\n" );
-}
-
-CMDF( do_idea )
-{
-    /*
-     * 1 = idea 
-     */
-    tybuid( ch, argument, 1 );
-}
-
 CMDF( do_typo )
 {
     /*

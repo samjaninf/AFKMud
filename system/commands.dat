@@ -1402,22 +1402,6 @@ Flags       ghost
 End
 
 #COMMAND
-Name        ide
-Code        do_ide
-Position    dead
-Level       0
-Log         normal
-End
-
-#COMMAND
-Name        idea
-Code        do_idea
-Position    dead
-Level       0
-Log         normal
-End
-
-#COMMAND
 Name        immortalize
 Code        do_immortalize
 Position    dead
@@ -1498,19 +1482,10 @@ Flags       ghost
 End
 
 #COMMAND
-Name        ident
-Code        do_ident
-Position    resting
-Level       2
-Log         normal
-Flags       action
-End
-
-#COMMAND
 Name        identify
 Code        do_identify
 Position    resting
-Level       2
+Level       1
 Log         normal
 Flags       action
 End

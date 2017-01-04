@@ -1445,7 +1445,7 @@ CMDF( do_cast )
      */
     victim = ( char_data * ) vo;
 
-    if( ch->pcdata && number_range( 1, max ) > ch->pcdata->learned[sn] )
+    if( !ch->is_immortal(  ) && ch->pcdata && number_range( 1, max ) > ch->pcdata->learned[sn] )
     {
         /*
          * Some more interesting loss of concentration messages  -Thoric 
@@ -2493,13 +2493,7 @@ SPELLF( spell_identify )
         return rSPELL_FAILED;
     }
 
-    if( ( obj = ch->get_obj_carry( target_name ) ) != nullptr )
-    {
-        obj_identify_output( ch, obj );
-        return rNONE;
-    }
-
-    else if( ( victim = ch->get_char_room( target_name ) ) != nullptr )
+    if( ( victim = ch->get_char_room( target_name ) ) != nullptr )
     {
         if( victim->has_immune( RIS_MAGIC ) )
         {

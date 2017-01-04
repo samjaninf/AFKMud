@@ -1538,11 +1538,6 @@ void make_scroll( obj_data * newitem )
                 name = "scroll recall";
                 desc = "Scroll of Recall";
                 break;
-            case 3:
-                value = skill_lookup( "identify" );
-                name = "scroll identify";
-                desc = "Scroll of Identify";
-                break;
             case 4:
                 value = skill_lookup( "bless" );
                 name = "scroll bless";
