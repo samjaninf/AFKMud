@@ -47,31 +47,6 @@ void check_sneaks( char_data * ch )
 }
 
 /*
- * Modify movement due to encumbrance				-Thoric
- */
-short encumbrance( char_data * ch, short move )
-{
-    int cur, max;
-
-    max = ch->can_carry_w(  );
-    cur = ch->carry_weight;
-    if( cur >= max )
-        return move * 4;
-    else if( cur >= max * 0.95 )
-        return ( short )( move * 3.5 );
-    else if( cur >= max * 0.90 )
-        return move * 3;
-    else if( cur >= max * 0.85 )
-        return ( short )( move * 2.5 );
-    else if( cur >= max * 0.80 )
-        return move * 2;
-    else if( cur >= max * 0.75 )
-        return ( short )( move * 1.5 );
-    else
-        return move;
-}
-
-/*
  * Check to see if a character can fall down, checks for looping   -Thoric
  */
 bool will_fall( char_data * ch, int fall )
@@ -819,10 +794,7 @@ ch_ret move_char( char_data * ch, exit_data * pexit, int fall, int direction, bo
         }
         else
         {
-            if( !ch->IS_FLOATING(  ) )
-                move = encumbrance( ch, sect_show[in_room->sector_type].move );
-            else
-                move = 1;
+            move = 1;
             if( ch->move < move )
             {
                 ch->print( "You are too exhausted.\r\n" );

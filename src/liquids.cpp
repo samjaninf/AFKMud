@@ -162,7 +162,7 @@ void save_liquids( void )
         fprintf( fp, "Color     %s~\n", liq->color.c_str(  ) );
         fprintf( fp, "Type      %d\n", liq->type );
         fprintf( fp, "Vnum      %d\n", liq->vnum );
-        fprintf( fp, "Mod       %d %d %d\n", liq->mod[COND_DRUNK] );
+        fprintf( fp, "Mod       %d\n", liq->mod[COND_DRUNK] );
         fprintf( fp, "%s", "End\n\n" );
     }
     fprintf( fp, "%s", "#END\n" );
@@ -1672,7 +1672,6 @@ CMDF( do_fill )
             {
                 if( !source->wear_flags.test( ITEM_TAKE ) || source->extra_flags.test( ITEM_BURIED ) || source->extra_flags.test( ITEM_NOFILL )
                     || ( source->extra_flags.test( ITEM_PROTOTYPE ) && !ch->can_take_proto(  ) )
-                    || ch->carry_weight + source->get_weight(  ) > ch->can_carry_w(  )
                     || ( source->get_real_weight(  ) + obj->get_real_weight(  ) / obj->count ) > obj->value[0] )
                     continue;
 
@@ -1744,7 +1743,6 @@ CMDF( do_fill )
                 if( !source->in_room    /* disallow inventory items */
                     || !source->wear_flags.test( ITEM_TAKE ) || source->extra_flags.test( ITEM_NOFILL )
                     || ( source->extra_flags.test( ITEM_PROTOTYPE ) && !ch->can_take_proto(  ) )
-                    || ch->carry_weight + source->get_weight(  ) > ch->can_carry_w(  )
                     || ( source->get_real_weight(  ) + obj->get_real_weight(  ) / obj->count ) > obj->value[0] )
                 {
                     ch->print( "You can't do that.\r\n" );
@@ -1828,7 +1826,6 @@ CMDF( do_fill )
                         || otmp->extra_flags.test( ITEM_NOFILL )
                         || ( otmp->extra_flags.test( ITEM_PROTOTYPE ) && !ch->can_take_proto(  ) )
                         || ch->carry_number + otmp->count > ch->can_carry_n(  )
-                        || ch->carry_weight + otmp->get_weight(  ) > ch->can_carry_w(  )
                         || ( source->get_real_weight(  ) + obj->get_real_weight(  ) / obj->count ) > obj->value[0] )
                         continue;
 

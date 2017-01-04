@@ -1325,12 +1325,6 @@ CMDF( do_look )
             return;
         }
 
-        if( ch->carry_weight + obj->weight > ch->can_carry_w(  ) )
-        {
-            ch->print( "It's too heavy for you to look under.\r\n" );
-            return;
-        }
-
         count = obj->count;
         obj->count = 1;
         act( AT_PLAIN, "You lift $p and look beneath it:", ch, obj, nullptr, TO_CHAR );

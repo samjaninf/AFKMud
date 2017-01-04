@@ -850,12 +850,6 @@ CMDF( do_buy )
             return;
         }
 
-        if( ch->carry_weight + ( obj->get_weight(  ) * noi ) + ( noi > 1 ? 2 : 0 ) > ch->can_carry_w(  ) )
-        {
-            ch->print( "You can't carry that much weight.\r\n" );
-            return;
-        }
-
         if( noi == 1 )
         {
             act( AT_ACTION, "$n buys $p.", ch, obj, nullptr, TO_ROOM );

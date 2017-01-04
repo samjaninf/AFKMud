@@ -40,8 +40,6 @@ obj_data *create_money( int );
 
 void get_obj( char_data * ch, obj_data * obj, obj_data * container )
 {
-    int weight; /* gold per-race multipliers */
-
     if( !obj->wear_flags.test( ITEM_TAKE ) && ( ch->level < sysdata->level_getobjnotake ) )
     {
         ch->print( "You can't take that.\r\n" );
@@ -52,65 +50,6 @@ void get_obj( char_data * ch, obj_data * obj, obj_data * container )
     {
         ch->print( "A godly force prevents you from getting close to it.\r\n" );
         return;
-    }
-
-    if( ch->carry_number + obj->get_number(  ) > ch->can_carry_n(  ) )
-    {
-        act( AT_PLAIN, "$d: you can't carry that many items.", ch, nullptr, obj->short_descr, TO_CHAR );
-        return;
-    }
-
-    if( obj->extra_flags.test( ITEM_COVERING ) )
-        weight = obj->weight;
-    else
-        weight = obj->get_weight(  );
-
-    /*
-     * Money weight shouldn't count 
-     */
-    if( obj->item_type != ITEM_MONEY )
-    {
-        if( obj->in_obj )
-        {
-            obj_data *tobj = obj->in_obj;
-            int inobj = 1;
-            bool checkweight = false;
-
-            /*
-             * need to make it check weight if its in a magic container 
-             */
-            if( tobj->item_type == ITEM_CONTAINER && tobj->extra_flags.test( ITEM_MAGIC ) )
-                checkweight = true;
-
-            while( tobj->in_obj )
-            {
-                tobj = tobj->in_obj;
-                ++inobj;
-
-                /*
-                 * need to make it check weight if its in a magic container 
-                 */
-                if( tobj->item_type == ITEM_CONTAINER && tobj->extra_flags.test( ITEM_MAGIC ) )
-                    checkweight = true;
-            }
-
-            /*
-             * need to check weight if not carried by ch or in a magic container. 
-             */
-            if( !tobj->carried_by || tobj->carried_by != ch || checkweight )
-            {
-                if( ( ch->carry_weight + weight ) > ch->can_carry_w(  ) )
-                {
-                    act( AT_PLAIN, "$d: you can't carry that much weight.", ch, nullptr, obj->short_descr, TO_CHAR );
-                    return;
-                }
-            }
-        }
-        else if( ( ch->carry_weight + weight ) > ch->can_carry_w(  ) )
-        {
-            act( AT_PLAIN, "$d: you can't carry that much weight.", ch, nullptr, obj->short_descr, TO_CHAR );
-            return;
-        }
     }
 
     if( container )
@@ -173,7 +112,7 @@ CMDF( do_get )
 
     argument = one_argument( argument, arg1 );
 
-    if( ch->carry_number < 0 || ch->carry_weight < 0 )
+    if( ch->carry_number < 0 )
     {
         ch->print( "Uh oh ... better contact an immortal about your number or weight of items carried.\r\n" );
         log_printf( "%s has negative carry_number or carry_weight!", ch->name );
@@ -309,7 +248,7 @@ CMDF( do_get )
                     cnt += obj->count;
                     get_obj( ch, obj, nullptr );
 
-                    if( ch->char_died(  ) || ch->carry_number >= ch->can_carry_n(  ) || ch->carry_weight >= ch->can_carry_w(  ) || ( number && cnt >= number ) )
+                    if( ch->char_died(  ) || ( number && cnt >= number ) )
                     {
                         if( IS_SAVE_FLAG( SV_GET ) && !ch->char_died(  ) )
                             ch->save(  );
@@ -352,12 +291,6 @@ CMDF( do_get )
                 if( !container->extra_flags.test( ITEM_COVERING ) )
                 {
                     ch->print( "That's not a container.\r\n" );
-                    return;
-                }
-
-                if( ch->carry_weight + container->weight > ch->can_carry_w(  ) )
-                {
-                    ch->print( "It's too heavy for you to lift.\r\n" );
                     return;
                 }
                 break;
@@ -529,7 +462,7 @@ CMDF( do_get )
                         obj->split( number - cnt );
                     cnt += obj->count;
                     get_obj( ch, obj, container );
-                    if( ch->char_died(  ) || ch->carry_number >= ch->can_carry_n(  ) || ch->carry_weight >= ch->can_carry_w(  ) || ( number && cnt >= number ) )
+                    if( ch->char_died(  ) || ( number && cnt >= number ) )
                     {
                         if( container->item_type == ITEM_CORPSE_PC )
                             write_corpse( container, container->short_descr + 14 );
@@ -626,15 +559,7 @@ CMDF( do_put )
     if( !container->carried_by && IS_SAVE_FLAG( SV_PUT ) )
         save_char = true;
 
-    if( container->extra_flags.test( ITEM_COVERING ) )
-    {
-        if( ch->carry_weight + container->weight > ch->can_carry_w(  ) )
-        {
-            ch->print( "It's too heavy for you to lift.\r\n" );
-            return;
-        }
-    }
-    else
+    if( !container->extra_flags.test( ITEM_COVERING ) )
     {
         if( container->item_type != ITEM_CONTAINER && container->item_type != ITEM_KEYRING && container->item_type != ITEM_QUIVER )
         {
@@ -1246,18 +1171,6 @@ CMDF( do_give )
         return;
     }
 
-    if( victim->carry_number + ( obj->get_number(  ) / obj->count ) > victim->can_carry_n(  ) )
-    {
-        act( AT_PLAIN, "$N has $S hands full.", ch, nullptr, victim, TO_CHAR );
-        return;
-    }
-
-    if( victim->carry_weight + ( obj->get_weight(  ) / obj->count ) > victim->can_carry_w(  ) )
-    {
-        act( AT_PLAIN, "$N can't carry that much weight.", ch, nullptr, victim, TO_CHAR );
-        return;
-    }
-
     if( !victim->can_see_obj( obj, false ) )
     {
         act( AT_PLAIN, "$N can't see it.", ch, nullptr, victim, TO_CHAR );
@@ -1316,12 +1229,6 @@ bool remove_obj( char_data * ch, int iWear, bool fReplace )
 
     if( !( obj = ch->get_eq( iWear ) ) )
         return true;
-
-    if( !fReplace && ch->carry_number + obj->get_number(  ) > ch->can_carry_n(  ) )
-    {
-        act( AT_PLAIN, "$d: you can't carry that many items.", ch, nullptr, obj->short_descr, TO_CHAR );
-        return false;
-    }
 
     if( !fReplace )
         return false;
@@ -2407,13 +2314,7 @@ CMDF( do_bury )
             return;
     }
 
-    if( obj->weight > ( UMAX( 5, ( ch->can_carry_w(  ) / 10 ) ) ) && !shovel )
-    {
-        ch->print( "You'd need a shovel to bury something that big.\r\n" );
-        return;
-    }
-
-    short move = ( obj->weight * 50 * ( shovel ? 1 : 5 ) ) / UMAX( 1, ch->can_carry_w(  ) );
+    short move = ( obj->weight * 50 * ( shovel ? 1 : 5 ) ) / 150;
     move = URANGE( 2, move, 1000 );
     if( move > ch->move )
     {

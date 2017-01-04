@@ -824,10 +824,7 @@ obj_data *obj_data::to_char( char_data * ch )
     if( owear_loc == WEAR_NONE )
     {
         ch->carry_number += onum;
-        ch->carry_weight += oweight;
     }
-    else if( !oextra_flags.test( ITEM_MAGIC ) )
-        ch->carry_weight += oweight;
     return ( oret ? oret : this );
 }
 
@@ -862,7 +859,6 @@ void obj_data::from_char(  )
     in_room = nullptr;
     carried_by = nullptr;
     ch->carry_number -= get_number(  );
-    ch->carry_weight -= get_weight(  );
 }
 
 /*
@@ -1047,9 +1043,6 @@ obj_data *obj_data::to_obj( obj_data * obj_to )
     }
 
     char_data *who;
-    if( !obj_to->in_magic_container(  ) && ( who = obj_to->who_carrying(  ) ) != nullptr )
-        who->carry_weight += get_weight(  );
-
     if( obj_to->in_room )
         obj_to->in_room->weight += this->get_weight(  );
 
@@ -1109,11 +1102,6 @@ void obj_data::from_obj(  )
         mx = obj_from->mx;
         my = obj_from->my;
     }
-
-    if( !magic )
-        for( ; obj_from; obj_from = obj_from->in_obj )
-            if( obj_from->carried_by )
-                obj_from->carried_by->carry_weight -= get_weight(  );
 }
 
 /*

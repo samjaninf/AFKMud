@@ -208,7 +208,6 @@ class char_data
     obj_data *get_obj_world( const string & );
     obj_data *get_eq( int );
     int can_carry_n(  );
-    int can_carry_w(  );
     void equip( obj_data *, int );
     void unequip( obj_data * );
     void aris_affect( affect_data * );
@@ -538,7 +537,6 @@ class char_data
     int tempnum;
     int gold;
     int exp;
-    int carry_weight;
     int carry_number;
     int home_vnum;  /* For sentinel mobs only, used during hotboot world save - Samson 4-1-01 */
     int zzzzz; /* skyship is idling      */

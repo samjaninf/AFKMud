@@ -2446,7 +2446,6 @@ void raw_kill( char_data * ch, char_data * victim )
     victim->set_susceps( 0 );
     victim->set_immunes( 0 );
     victim->set_absorbs( 0 );
-    victim->carry_weight = 0;
     victim->armor = 100;
     victim->armor += race_table[victim->race]->ac_plus;
     victim->set_attacks( race_table[victim->race]->attacks );

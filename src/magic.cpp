@@ -2481,7 +2481,6 @@ SPELLF( spell_gate )
 /* Output of information reformatted to look better - Samson 2-8-98 */
 SPELLF( spell_identify )
 {
-    obj_data *obj;
     char_data *victim;
     skill_type *sktmp;
     skill_type *skill = get_skilltype( sn );
@@ -3405,7 +3404,7 @@ SPELLF( spell_transport )
         return rSPELL_FAILED;
     }
 
-    if( !( obj = ch->get_obj_carry( arg3 ) ) || ( victim->carry_weight + obj->get_weight(  ) ) > victim->can_carry_w(  ) || victim->has_actflag( ACT_PROTOTYPE ) )
+    if( !( obj = ch->get_obj_carry( arg3 ) ) || victim->has_actflag( ACT_PROTOTYPE ) )
     {
         failed_casting( skill, ch, victim, nullptr );
         return rSPELL_FAILED;

@@ -4166,13 +4166,6 @@ CMDF( do_steal )
         return;
     }
 
-    if( ch->carry_weight + ( obj->get_weight(  ) / obj->count ) > ch->can_carry_w(  ) )
-    {
-        ch->print( "You can't carry that much weight.\r\n" );
-        ch->learn_from_failure( gsn_steal );
-        return;
-    }
-
     obj->separate(  );
     obj->from_char(  );
     obj->to_char( ch );

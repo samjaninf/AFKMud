@@ -1178,53 +1178,11 @@ obj_data *char_data::get_eq( int iWear )
  */
 int char_data::can_carry_n(  )
 {
-    int penalty = 0;
-
-    if( this->is_immortal(  ) )
+    if( this->is_immortal(  ) || this->has_actflag( ACT_IMMORTAL ) )
         return this->level * 200;
 
-    if( !this->isnpc(  ) && this->Class == CLASS_MONK )
-        return 20;  /* Monks can only carry 20 items total */
-
-    /*
-     * Come now, never heard of pack animals people? Altered so pets can hold up to 10 - Samson 4-12-98 
-     */
-    if( this->is_pet(  ) )
-        return 10;
-
-    if( this->has_actflag( ACT_IMMORTAL ) )
-        return this->level * 200;
-
-    if( this->get_eq( WEAR_WIELD ) )
-        ++penalty;
-    if( this->get_eq( WEAR_DUAL_WIELD ) )
-        ++penalty;
-    if( this->get_eq( WEAR_MISSILE_WIELD ) )
-        ++penalty;
-    if( this->get_eq( WEAR_HOLD ) )
-        ++penalty;
-    if( this->get_eq( WEAR_SHIELD ) )
-        ++penalty;
-
-    /*
-     * Removed old formula, added something a bit more sensible here
-     * Samson 4-12-98. Minimum of 15, (dex+str+level)-10 - penalty, or a max of 40. 
-     */
-    return URANGE( 15, ( this->get_curr_dex(  ) + this->get_curr_str(  ) + this->level ) - 10 - penalty, 40 );
-}
-
-/*
- * Retrieve a character's carry capacity.
- */
-int char_data::can_carry_w(  )
-{
-    if( this->is_immortal(  ) )
-        return 1000000;
-
-    if( this->has_actflag( ACT_IMMORTAL ) )
-        return 1000000;
-
-    return str_app[this->get_curr_str(  )].carry;
+    // all mortals can carry a static 40 items
+    return 40;
 }
 
 /*
@@ -1271,8 +1229,6 @@ void char_data::equip( obj_data * obj, int iWear )
     obj->wear_loc = iWear;
 
     this->carry_number -= obj->get_number(  );
-    if( obj->extra_flags.test( ITEM_MAGIC ) )
-        this->carry_weight -= obj->get_weight(  );
 
     affect_data *af;
     list < affect_data * >::iterator paf;
@@ -1313,8 +1269,6 @@ void char_data::unequip( obj_data * obj )
         tobj->wear_loc = WEAR_WIELD;
 
     this->carry_number += obj->get_number(  );
-    if( obj->extra_flags.test( ITEM_MAGIC ) )
-        this->carry_weight += obj->get_weight(  );
 
     this->armor += obj->apply_ac( obj->wear_loc );
     obj->wear_loc = -1;
@@ -2417,7 +2371,7 @@ void char_data::from_room(  )
         --this->in_room->light;
 
     // Take some weight off the room.
-    this->in_room->weight -= ( this->weight + this->carry_weight );
+    this->in_room->weight -= this->weight;
 
     /*
      * Character's affect on the room
@@ -2500,7 +2454,7 @@ bool char_data::to_room( room_index * pRoomIndex )
         ++pRoomIndex->light;
 
     // Put some weight on the room.
-    pRoomIndex->weight += ( this->weight + this->carry_weight );
+    pRoomIndex->weight += this->weight;
 
     /*
      * Room's affect on the character

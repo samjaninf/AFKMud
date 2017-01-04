@@ -3008,7 +3008,6 @@ void fix_char( char_data * ch )
     ch->saving_spell_staff = 0;
     ch->saving_poison_death = 0;
 
-    ch->carry_weight = 0;
     ch->carry_number = 0;
 
     ch->ClassSpecificStuff(  ); /* Brought over from DOTD code - Samson 4-6-99 */
@@ -3042,7 +3041,6 @@ void fix_char( char_data * ch )
         }
     }
 
-    ch->carry_weight = 0;
     ch->carry_number = 0;
 
     list < obj_data * >::iterator iobj;
@@ -3052,8 +3050,6 @@ void fix_char( char_data * ch )
 
         if( obj->wear_loc == WEAR_NONE )
             ch->carry_number += obj->get_number(  );
-        if( !obj->extra_flags.test( ITEM_MAGIC ) )
-            ch->carry_weight += obj->get_weight(  );
     }
     ch->re_equip(  );
 }
@@ -3316,12 +3312,6 @@ CMDF( do_stash )
     if( victim->carry_number + ( obj->get_number(  ) / obj->count ) > victim->can_carry_n(  ) )
     {
         act( AT_PLAIN, "$N has $S hands full.", ch, nullptr, victim, TO_CHAR );
-        return;
-    }
-
-    if( victim->carry_weight + ( obj->get_weight(  ) / obj->count ) > victim->can_carry_w(  ) )
-    {
-        act( AT_PLAIN, "$N can't carry that much weight.", ch, nullptr, victim, TO_CHAR );
         return;
     }
 

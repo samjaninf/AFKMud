@@ -2110,14 +2110,6 @@ void descriptor_data::prompt(  )
                         pstat = exp_level( ch->level + 1 ) - ch->exp;
                         break;
 
-                    case 'w':
-                        pstat = ch->carry_weight;
-                        break;
-
-                    case 'W':
-                        pstat = ch->can_carry_w(  );
-                        break;
-
                     case 'o':  /* display name of object on auction */
                         if( auction->item )
                             mudstrlcpy( pbuf, auction->item->name, MSL - ( pbuf - buf ) );

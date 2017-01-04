@@ -1350,9 +1350,6 @@ int mprog_do_ifcheck( char *ifcheck, char_data * mob, char_data * actor, obj_dat
         if( !str_cmp( chck, "class" ) )
             return mprog_seval( npc_class[chkchar->Class], opr, rval, mob );
 
-        if( !str_cmp( chck, "weight" ) )
-            return mprog_veval( chkchar->carry_weight, opr, atoi( rval ), mob );
-
         if( !str_cmp( chck, "hostdesc" ) )
         {
             if( chkchar->isnpc(  ) || chkchar->desc->hostname.empty(  ) )
