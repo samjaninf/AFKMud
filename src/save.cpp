@@ -307,7 +307,7 @@ void fwrite_char( char_data * ch, FILE * fp )
 
     fprintf( fp, "AttrMod      %d %d %d %d %d %d %d\n", ch->mod_str, ch->mod_int, ch->mod_wis, ch->mod_dex, ch->mod_con, ch->mod_cha, ch->mod_lck );
 
-    fprintf( fp, "Condition    %d %d %d\n", ch->pcdata->condition[0], ch->pcdata->condition[1], ch->pcdata->condition[2] );
+    fprintf( fp, "Condition    %d\n", ch->pcdata->condition[0] );
 
     if( ch->is_immortal(  ) )
     {
@@ -1123,10 +1123,8 @@ void fread_char( char_data * ch, FILE * fp, bool preload, bool copyover )
                 if( !str_cmp( word, "Condition" ) )
                 {
                     line = fread_line( fp );
-                    sscanf( line, "%d %d %d", &x1, &x2, &x3 );
+                    sscanf( line, "%d", &x1 );
                     ch->pcdata->condition[0] = x1;
-                    ch->pcdata->condition[1] = x2;
-                    ch->pcdata->condition[2] = x3;
                     break;
                 }
 
