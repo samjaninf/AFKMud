@@ -5924,37 +5924,6 @@ SPELLF( spell_creeping_doom )
     return rNONE;
 }
 
-SPELLF( spell_heroes_feast )
-{
-    list < char_data * >::iterator ich;
-    int heal = dice( 1, 4 ) + 4;
-
-    for( ich = ch->in_room->people.begin(  ); ich != ch->in_room->people.end(  ); ++ich )
-    {
-        char_data *gch = *ich;
-
-        if( is_same_group( gch, ch ) )
-        {
-            if( gch->isnpc(  ) )
-                continue;
-            if( !is_same_char_map( ch, gch ) )
-                continue;
-            else
-            {
-                gch->move = gch->max_move;
-                gch->hit += heal;
-                if( gch->hit > gch->max_hit )
-                    gch->hit = gch->max_hit;
-                gch->pcdata->condition[COND_FULL] = sysdata->maxcondval;
-                gch->pcdata->condition[COND_THIRST] = sysdata->maxcondval;
-                gch->pcdata->condition[COND_DRUNK] = 0;
-                gch->print( "You partake of a magnificent feast!\r\n" );
-            }
-        }
-    }
-    return rNONE;
-}
-
 SPELLF( spell_remove_paralysis )
 {
     char_data *victim = ( char_data * ) vo;

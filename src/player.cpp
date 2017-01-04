@@ -1786,12 +1786,6 @@ CMDF( do_score )
     if( ch->pcdata->condition[COND_DRUNK] > 10 )
         ch->printf( "%sYou are drunk.\r\n", s2 );
 
-    if( ch->pcdata->condition[COND_THIRST] == 0 )
-        ch->printf( "%sYou are extremely thirsty.\r\n", s2 );
-
-    if( ch->pcdata->condition[COND_FULL] == 0 )
-        ch->printf( "%sYou are starving.\r\n", s2 );
-
     ch->set_color( AT_SCORE2 );
     if( ch->position != POS_SLEEPING )
     {

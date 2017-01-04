@@ -69,8 +69,6 @@ class race_type
     short exp_multiplier;
     short height;
     short weight;
-    short hunger_mod;
-    short thirst_mod;
     short saving_poison_death;
     short saving_wand;
     short saving_para_petri;

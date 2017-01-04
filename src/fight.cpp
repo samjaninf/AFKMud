@@ -2471,10 +2471,6 @@ void raw_kill( char_data * ch, char_data * victim )
     victim->hit = UMAX( 1, victim->hit );
     victim->mana = UMAX( 1, victim->mana );
     victim->move = UMAX( 1, victim->move );
-    if( victim->pcdata->condition[COND_FULL] != -1 )
-        victim->pcdata->condition[COND_FULL] = sysdata->maxcondval / 2;
-    if( victim->pcdata->condition[COND_THIRST] != -1 )
-        victim->pcdata->condition[COND_THIRST] = sysdata->maxcondval / 2;
 
     if( IS_SAVE_FLAG( SV_DEATH ) )
         victim->save(  );

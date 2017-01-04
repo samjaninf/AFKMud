@@ -145,18 +145,6 @@ int mana_gain( char_data * ch )
     if( ch->has_aflag( AFF_POISON ) )
         gain = gain / 4;
 
-    if( !ch->isnpc(  ) )
-        if( ch->pcdata->condition[COND_FULL] == 0 || ch->pcdata->condition[COND_THIRST] == 0 )
-            gain = gain / 4;
-
-    if( !ch->isnpc(  ) )
-    {
-        if( ch->pcdata->condition[COND_DRUNK] > 10 )
-            gain += ( gain / 2 );
-        else if( ch->pcdata->condition[COND_DRUNK] > 0 )
-            gain += ( gain / 4 );
-    }
-
     if( ch->Class != CLASS_MAGE && ch->Class != CLASS_NECROMANCER && ch->Class != CLASS_CLERIC && ch->Class != CLASS_DRUID )
         gain -= 2;
 
@@ -208,8 +196,6 @@ int hit_gain( char_data * ch )
 
     if( !ch->isnpc(  ) )
     {
-        if( ch->pcdata->condition[COND_FULL] == 0 || ch->pcdata->condition[COND_THIRST] == 0 )
-            gain = gain / 8;
         if( ch->pcdata->condition[COND_DRUNK] > 10 )
             gain += ( gain / 2 );
         else if( ch->pcdata->condition[COND_DRUNK] > 0 )
@@ -267,10 +253,6 @@ int move_gain( char_data * ch )
     if( ch->has_aflag( AFF_POISON ) )
         gain = gain / 8;
 
-    if( !ch->isnpc(  ) )
-        if( ch->pcdata->condition[COND_FULL] == 0 || ch->pcdata->condition[COND_THIRST] == 0 )
-            gain = gain / 4;
-
     if( ch->Class != CLASS_ROGUE && ch->Class != CLASS_BARD && ch->Class != CLASS_MONK )
         gain -= 2;
 
@@ -294,7 +276,7 @@ void gain_condition( char_data * ch, int iCond, int value )
     condition = ch->pcdata->condition[iCond];
 
     /*
-     * Immune to hunger/thirst 
+     * Immune
      */
     if( condition == -1 )
         return;
@@ -305,20 +287,6 @@ void gain_condition( char_data * ch, int iCond, int value )
     {
         switch ( iCond )
         {
-            case COND_FULL:
-                ch->print( "&[hungry]You are STARVING!\r\n" );
-                act( AT_HUNGRY, "$n is starved half to death!", ch, nullptr, nullptr, TO_ROOM );
-                if( number_bits( 1 ) == 0 )
-                    ch->worsen_mental_state( 1 );
-                break;
-
-            case COND_THIRST:
-                ch->print( "&[thirsty]You are DYING of THIRST!\r\n" );
-                act( AT_THIRSTY, "$n is dying of thirst!", ch, nullptr, nullptr, TO_ROOM );
-                if( number_bits( 1 ) == 0 )
-                    ch->worsen_mental_state( 1 );
-                break;
-
             case COND_DRUNK:
                 if( condition != 0 )
                     ch->print( "&[sober]You are sober.\r\n" );
@@ -342,57 +310,9 @@ void gain_condition( char_data * ch, int iCond, int value )
             default:
                 break;
 
-            case COND_FULL:
-                ch->print( "&[hungry]You are really hungry.\r\n" );
-                act( AT_HUNGRY, "You can hear $n's stomach growling.", ch, nullptr, nullptr, TO_ROOM );
-                if( number_bits( 1 ) == 0 )
-                    ch->worsen_mental_state( 1 );
-                break;
-
-            case COND_THIRST:
-                ch->print( "&[thirsty]You are really thirsty.\r\n" );
-                act( AT_THIRSTY, "$n looks a little parched.", ch, nullptr, nullptr, TO_ROOM );
-                if( number_bits( 1 ) == 0 )
-                    ch->worsen_mental_state( 1 );
-                break;
-
             case COND_DRUNK:
                 if( condition != 0 )
                     ch->print( "&[sober]You are feeling a little less light headed.\r\n" );
-                break;
-        }
-    }
-
-    if( ch->pcdata->condition[iCond] == 2 )
-    {
-        switch ( iCond )
-        {
-            default:
-                break;
-
-            case COND_FULL:
-                ch->print( "&[hungry]You are hungry.\r\n" );
-                break;
-
-            case COND_THIRST:
-                ch->print( "&[thirsty]You are thirsty.\r\n" );
-                break;
-        }
-    }
-
-    if( ch->pcdata->condition[iCond] == 3 )
-    {
-        switch ( iCond )
-        {
-            default:
-                break;
-
-            case COND_FULL:
-                ch->print( "&[hungry]You are a mite peckish.\r\n" );
-                break;
-
-            case COND_THIRST:
-                ch->print( "&[thirsty]You could use a sip of something refreshing.\r\n" );
                 break;
         }
     }
@@ -988,40 +908,6 @@ void char_calendar_update( void )
         if( !ch->is_immortal(  ) )
         {
             gain_condition( ch, COND_DRUNK, -1 );
-
-            /*
-             * Newbies won't starve now - Samson 10-2-98 
-             */
-            if( ch->in_room && ch->level > 3 )
-                gain_condition( ch, COND_FULL, -1 + race_table[ch->race]->hunger_mod );
-
-            /*
-             * Newbies won't dehydrate now - Samson 10-2-98 
-             */
-            if( ch->in_room && ch->level > 3 )
-            {
-                int sector;
-
-                if( ch->has_pcflag( PCFLAG_ONMAP ) )
-                    sector = get_terrain( ch->wmap, ch->mx, ch->my );
-                else
-                    sector = ch->in_room->sector_type;
-
-                switch ( sector )
-                {
-                    default:
-                        gain_condition( ch, COND_THIRST, -1 + race_table[ch->race]->thirst_mod );
-                        break;
-                    case SECT_DESERT:
-                        gain_condition( ch, COND_THIRST, -3 + race_table[ch->race]->thirst_mod );
-                        break;
-                    case SECT_UNDERWATER:
-                    case SECT_OCEANFLOOR:
-                        if( number_bits( 1 ) == 0 )
-                            gain_condition( ch, COND_THIRST, -1 + race_table[ch->race]->thirst_mod );
-                        break;
-                }
-            }
         }
     }
 }
@@ -1190,65 +1076,6 @@ void char_update( void )
 
             if( ch->pcdata->condition[COND_DRUNK] > 8 )
                 ch->worsen_mental_state( ch->pcdata->condition[COND_DRUNK] / 8 );
-            if( ch->pcdata->condition[COND_FULL] > 1 )
-            {
-                switch ( ch->position )
-                {
-                    default:
-                        break;
-                    case POS_SLEEPING:
-                        ch->better_mental_state( 4 );
-                        break;
-                    case POS_RESTING:
-                        ch->better_mental_state( 3 );
-                        break;
-                    case POS_SITTING:
-                    case POS_MOUNTED:
-                        ch->better_mental_state( 2 );
-                        break;
-                    case POS_STANDING:
-                        ch->better_mental_state( 1 );
-                        break;
-                    case POS_FIGHTING:
-                    case POS_EVASIVE:
-                    case POS_DEFENSIVE:
-                    case POS_AGGRESSIVE:
-                    case POS_BERSERK:
-                        if( number_bits( 2 ) == 0 )
-                            ch->better_mental_state( 1 );
-                        break;
-                }
-            }
-
-            if( ch->pcdata->condition[COND_THIRST] > 1 )
-            {
-                switch ( ch->position )
-                {
-                    default:
-                        break;
-                    case POS_SLEEPING:
-                        ch->better_mental_state( 5 );
-                        break;
-                    case POS_RESTING:
-                        ch->better_mental_state( 3 );
-                        break;
-                    case POS_SITTING:
-                    case POS_MOUNTED:
-                        ch->better_mental_state( 2 );
-                        break;
-                    case POS_STANDING:
-                        ch->better_mental_state( 1 );
-                        break;
-                    case POS_FIGHTING:
-                    case POS_EVASIVE:
-                    case POS_DEFENSIVE:
-                    case POS_AGGRESSIVE:
-                    case POS_BERSERK:
-                        if( number_bits( 2 ) == 0 )
-                            ch->better_mental_state( 1 );
-                        break;
-                }
-            }
         }
 
         if( !ch->isnpc(  ) && !ch->is_immortal(  ) && ch->pcdata->release_date > 0 && ch->pcdata->release_date <= current_time )

@@ -41,11 +41,6 @@ enum seasons
     SEASON_SPRING, SEASON_SUMMER, SEASON_FALL, SEASON_WINTER, SEASON_MAX
 };
 
-/* Hunger/Thirst modifiers */
-const int WINTER_HUNGER = 1;
-const int SUMMER_THIRST = 1;
-const int SUMMER_THIRST_DESERT = 2;
-
 /* Holiday chart */
 #define HOLIDAY_FILE SYSTEM_DIR "holidays.dat"
 

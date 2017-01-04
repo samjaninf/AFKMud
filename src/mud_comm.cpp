@@ -504,24 +504,6 @@ CMDF( do_mpmset )
         return;
     }
 
-    if( !str_cmp( arg2, "thirst" ) )
-    {
-        if( victim->isnpc(  ) )
-        {
-            progbugf( ch, "%s", "MpMset: can't set npc thirst" );
-            return;
-        }
-
-        if( value < 0 || value > 100 )
-        {
-            progbugf( ch, "%s", "MpMset: Invalid pc thirst" );
-            return;
-        }
-
-        victim->pcdata->condition[COND_THIRST] = value;
-        return;
-    }
-
     if( !str_cmp( arg2, "drunk" ) )
     {
         if( victim->isnpc(  ) )
@@ -537,24 +519,6 @@ CMDF( do_mpmset )
         }
 
         victim->pcdata->condition[COND_DRUNK] = value;
-        return;
-    }
-
-    if( !str_cmp( arg2, "full" ) )
-    {
-        if( victim->isnpc(  ) )
-        {
-            progbugf( ch, "%s", "MpMset: can't set npc full" );
-            return;
-        }
-
-        if( value < 0 || value > 100 )
-        {
-            progbugf( ch, "%s", "MpMset: Invalid pc full" );
-            return;
-        }
-
-        victim->pcdata->condition[COND_FULL] = value;
         return;
     }
 

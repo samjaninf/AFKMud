@@ -109,8 +109,6 @@ pc_data::pc_data(  )
     this->tell_history.clear(  );
     for( int sn = 0; sn < MAX_BEACONS; ++sn )
         this->beacon[sn] = 0;
-    this->condition[COND_THIRST] = ( int )( sysdata->maxcondval * .75 );
-    this->condition[COND_FULL] = ( int )( sysdata->maxcondval * .75 );
     this->pagerlen = 24;
     this->secedit = SECT_OCEAN; /* Initialize Map OLC sector - Samson 8-1-99 */
     this->lasthost = "Unknown-Host";
@@ -1853,16 +1851,6 @@ void char_data::affect_modify( affect_data * paf, bool fAdd )
             break;
         case APPLY_REMOVE:
             this->unset_aflag( mod2 );
-            break;
-
-        case APPLY_FULL:
-            if( !this->isnpc(  ) )
-                this->pcdata->condition[COND_FULL] = URANGE( 0, this->pcdata->condition[COND_FULL] + mod, sysdata->maxcondval );
-            break;
-
-        case APPLY_THIRST:
-            if( !this->isnpc(  ) )
-                this->pcdata->condition[COND_THIRST] = URANGE( 0, this->pcdata->condition[COND_THIRST] + mod, sysdata->maxcondval );
             break;
 
         case APPLY_DRUNK:
@@ -5397,9 +5385,6 @@ CMDF( do_levelup )
     advance_level( ch );
     log_printf_plus( LOG_INFO, LEVEL_IMMORTAL, "%s has advanced to level %d!", ch->name, ch->level );
     cmdf( ch, "gtell I just reached level %d!", ch->level );
-
-    if( ch->level == 4 )
-        ch->print( "&YYou can now be affected by hunger and thirst.\r\nIt is advisable for you to purchase food and water soon.\r\n" );
 
     if( number_range( 1, 2 ) == 1 )
         ch->sound( "level.mid", 100, false );

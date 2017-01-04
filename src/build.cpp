@@ -198,7 +198,7 @@ const char *a_types[] = {
     "steal", "sneak", "hide", "palm", "detrap", "dodge", "spellfail", "scan", "gouge",
     "search", "mount", "disarm", "kick", "parry", "bash", "stun", "punch", "climb",
     "grip", "scribe", "brew", "wearspell", "removespell", "UNUSED", "mentalstate",
-    "stripsn", "remove", "dig", "full", "thirst", "drunk", "hitregen",
+    "stripsn", "remove", "dig", "full", "drunk", "hitregen",
     "manaregen", "moveregen", "antimagic", "roomflag", "sectortype",
     "roomlight", "televnum", "teledelay", "cook", "recurringspell", "race", "hit-n-dam",
     "save_all", "eat_spell", "race_slayer", "align_slayer", "contagious",
@@ -1291,7 +1291,7 @@ CMDF( do_mset )
         ch->print( " [Groups]\r\n" );
         ch->print( "   |clan       |favor      |deity\r\n" );
         ch->print( " [Misc]\r\n" );
-        ch->print( "   |thirst     |drunk      |hunger     |flags\r\n\r\n" );
+        ch->print( "   |drunk      |flags\r\n\r\n" );
         ch->print( "  see BODYPARTS, RIS, LANGAUGES, and SAVINGTHROWS for help\r\n\r\n" );
         ch->print( "For editing index/prototype mobiles:\r\n" );
         ch->print( "   |hitnumdie  |hitsizedie |hitplus (hit points)\r\n" );
@@ -1745,24 +1745,6 @@ CMDF( do_mset )
         return;
     }
 
-    if( !str_cmp( arg2, "thirst" ) )
-    {
-        if( victim->isnpc(  ) )
-        {
-            ch->print( "Not on NPC's.\r\n" );
-            return;
-        }
-
-        if( value < -1 || value > 100 )
-        {
-            ch->print( "Thirst range is -1 to 100.\r\n" );
-            return;
-        }
-        victim->pcdata->condition[COND_THIRST] = value;
-        ch->print( "Thirst set.\r\n" );
-        return;
-    }
-
     if( !str_cmp( arg2, "drunk" ) )
     {
         if( victim->isnpc(  ) )
@@ -1790,24 +1772,6 @@ CMDF( do_mset )
         }
         victim->pcdata->age_bonus = value;
         ch->print( "Agemod set.\r\n" );
-        return;
-    }
-
-    if( !str_cmp( arg2, "hunger" ) )
-    {
-        if( victim->isnpc(  ) )
-        {
-            ch->print( "Not on NPC's.\r\n" );
-            return;
-        }
-
-        if( value < -1 || value > 100 )
-        {
-            ch->print( "Hunger range is -1 to 100.\r\n" );
-            return;
-        }
-        victim->pcdata->condition[COND_FULL] = value;
-        ch->print( "Hunger set.\r\n" );
         return;
     }
 

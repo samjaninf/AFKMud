@@ -95,7 +95,7 @@ const char *liquid_types[LIQTYPE_TOP] = {
 };
 
 const char *mod_types[MAX_CONDS] = {
-    "Drunk", "Full", "Thirst"
+    "Drunk",
 };
 
 /* locals */
@@ -162,7 +162,7 @@ void save_liquids( void )
         fprintf( fp, "Color     %s~\n", liq->color.c_str(  ) );
         fprintf( fp, "Type      %d\n", liq->type );
         fprintf( fp, "Vnum      %d\n", liq->vnum );
-        fprintf( fp, "Mod       %d %d %d\n", liq->mod[COND_DRUNK], liq->mod[COND_FULL], liq->mod[COND_THIRST] );
+        fprintf( fp, "Mod       %d %d %d\n", liq->mod[COND_DRUNK] );
         fprintf( fp, "%s", "End\n\n" );
     }
     fprintf( fp, "%s", "#END\n" );
@@ -221,8 +221,6 @@ liquid_data *fread_liquid( FILE * fp )
                 if( !str_cmp( word, "Mod" ) )
                 {
                     liq->mod[COND_DRUNK] = fread_number( fp );
-                    liq->mod[COND_FULL] = fread_number( fp );
-                    liq->mod[COND_THIRST] = fread_number( fp );
                     if( file_version < 3 )
                         fread_number( fp );
                 }
@@ -772,7 +770,7 @@ CMDF( do_setliquid )
         {
             int i;
             bool found = false;
-            static const char *arg_names[MAX_CONDS] = { "drunk", "full", "thirst" };
+            static const char *arg_names[MAX_CONDS] = { "drunk" };
 
             if( argument.empty(  ) )
             {
@@ -1335,15 +1333,6 @@ CMDF( do_drink )
         return;
     }
 
-    bool immuneH = false, immuneT = false;
-    if( !ch->isnpc(  ) )
-    {
-        if( ch->pcdata->condition[COND_THIRST] == -1 )
-            immuneT = true;
-        if( ch->pcdata->condition[COND_FULL] == -1 )
-            immuneH = true;
-    }
-
     switch ( obj->item_type )
     {
         default:
@@ -1385,12 +1374,8 @@ CMDF( do_drink )
 
             if( !ch->isnpc(  ) && obj->value[2] != 0 )
             {
-                gain_condition( ch, COND_THIRST, liq->mod[COND_THIRST] );
-                gain_condition( ch, COND_FULL, liq->mod[COND_FULL] );
                 gain_condition( ch, COND_DRUNK, liq->mod[COND_DRUNK] );
             }
-            else if( !ch->isnpc(  ) && obj->value[2] == 0 )
-                ch->pcdata->condition[COND_THIRST] = sysdata->maxcondval;
 
             if( !oprog_use_trigger( ch, obj, nullptr, nullptr ) )
             {
@@ -1425,8 +1410,6 @@ CMDF( do_drink )
             }
 
             gain_condition( ch, COND_DRUNK, liq->mod[COND_DRUNK] );
-            gain_condition( ch, COND_FULL, liq->mod[COND_FULL] );
-            gain_condition( ch, COND_THIRST, liq->mod[COND_THIRST] );
 
             if( liq->type == LIQTYPE_POISON )
             {
@@ -1455,17 +1438,6 @@ CMDF( do_drink )
                     ch->print( "You feel very drunk.\r\n" );
                 else if( ch->pcdata->condition[COND_DRUNK] == sysdata->maxcondval )
                     ch->print( "You feel like your going to pass out.\r\n" );
-
-                if( ch->pcdata->condition[COND_THIRST] > ( sysdata->maxcondval / 2 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .4 ) )
-                    ch->print( "Your stomach begins to slosh around.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .4 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .6 ) )
-                    ch->print( "You start to feel bloated.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .6 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .9 ) )
-                    ch->print( "You feel bloated.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .9 ) && ch->pcdata->condition[COND_THIRST] < sysdata->maxcondval )
-                    ch->print( "You stomach is almost filled to it's brim!\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] == sysdata->maxcondval )
-                    ch->print( "Your stomach is full, you can't manage to get anymore down.\r\n" );
             }
         }
 
@@ -1476,15 +1448,6 @@ CMDF( do_drink )
             if( obj->value[1] <= 0 )
             {
                 ch->print( "It is already empty.\r\n" );
-                return;
-            }
-
-            /*
-             * allow water to be drank; but nothing else on a full stomach -Nopey 
-             */
-            if( !ch->isnpc(  ) && ( ch->pcdata->condition[COND_THIRST] == sysdata->maxcondval || ch->pcdata->condition[COND_FULL] == sysdata->maxcondval ) )
-            {
-                ch->print( "Your stomach is too full to drink anymore!\r\n" );
                 return;
             }
 
@@ -1505,8 +1468,6 @@ CMDF( do_drink )
              * gain conditions accordingly              -Nopey 
              */
             gain_condition( ch, COND_DRUNK, liq->mod[COND_DRUNK] );
-            gain_condition( ch, COND_FULL, liq->mod[COND_FULL] );
-            gain_condition( ch, COND_THIRST, liq->mod[COND_THIRST] );
 
             if( liq->type == LIQTYPE_POISON )
             {
@@ -1535,17 +1496,6 @@ CMDF( do_drink )
                     ch->print( "You feel very drunk.\r\n" );
                 else if( ch->pcdata->condition[COND_DRUNK] == sysdata->maxcondval )
                     ch->print( "You feel like your going to pass out.\r\n" );
-
-                if( ch->pcdata->condition[COND_THIRST] > ( sysdata->maxcondval / 2 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .4 ) )
-                    ch->print( "Your stomach begins to slosh around.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .4 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .6 ) )
-                    ch->print( "You start to feel bloated.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .6 ) && ch->pcdata->condition[COND_THIRST] < ( sysdata->maxcondval * .9 ) )
-                    ch->print( "You feel bloated.\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] >= ( sysdata->maxcondval * .9 ) && ch->pcdata->condition[COND_THIRST] < sysdata->maxcondval )
-                    ch->print( "You stomach is almost filled to it's brim!\r\n" );
-                else if( ch->pcdata->condition[COND_THIRST] == sysdata->maxcondval )
-                    ch->print( "Your stomach is full, you can't manage to get anymore down.\r\n" );
             }
 
             obj->value[1] -= 1;
@@ -1556,14 +1506,6 @@ CMDF( do_drink )
             }
             break;
         }
-    }
-
-    if( !ch->isnpc(  ) )
-    {
-        if( immuneH )
-            ch->pcdata->condition[COND_FULL] = -1;
-        if( immuneT )
-            ch->pcdata->condition[COND_THIRST] = -1;
     }
 
     if( ch->who_fighting(  ) && ch->IS_PKILL(  ) )

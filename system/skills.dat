@@ -3563,27 +3563,6 @@ Helptext     Heal will cure 150 hitpoints of damage done to the target.~
 End
 
 #SKILL
-Name         heroes feast~
-Type         Spell
-Info         1024
-Author	      Smaug~
-Flags        nobind noscribe nobrew group~
-Minpos       standing~
-Slot         524
-Mana         60
-Rounds       15
-Ego          -2
-Code         spell_heroes_feast
-Dammsg       ~
-Wearoff      !Heroes Feast!~
-Minlevel     48
-Helptext     By means of this spell, the caster causes a magnificent feast to appear.
-Only the caster's group partakes of it. This feast slakes the thirst of
-those who eat it as well as satiating them. It also restores one hitpoint
-and returns movement points to their maximum.~
-End
-
-#SKILL
 Name         hold person~
 Type         Spell
 Info         3076

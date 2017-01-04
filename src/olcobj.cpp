@@ -285,10 +285,6 @@ void ostat_plus( char_data * ch, obj_data * obj, bool olc )
             ch->printf( "Liquid color: %s\r\n", liq->color.c_str(  ) );
             if( liq->mod[COND_DRUNK] != 0 )
                 ch->printf( "Affects Drunkeness by: %d\r\n", liq->mod[COND_DRUNK] );
-            if( liq->mod[COND_FULL] != 0 )
-                ch->printf( "Affects Hunger by: %d\r\n", liq->mod[COND_FULL] );
-            if( liq->mod[COND_THIRST] != 0 )
-                ch->printf( "Affects Thirst by: %d\r\n", liq->mod[COND_THIRST] );
             ch->printf( "Poisoned: &c%s\r\n", liq->type == LIQTYPE_POISON ? "Yes" : "No" );
             break;
 

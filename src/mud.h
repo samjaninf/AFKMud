@@ -525,7 +525,7 @@ enum dir_pulltypes
  */
 enum pc_conditions
 {
-    COND_DRUNK, COND_FULL, COND_THIRST, MAX_CONDS
+    COND_DRUNK, MAX_CONDS
 };
 
 /*

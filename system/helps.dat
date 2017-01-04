@@ -9334,22 +9334,6 @@ End
 #HELP
 Level    0
 WebInvis 0
-Keywords HEROES FEAST
-Related  EAT, DRINK
-Text     Usage        : cast 'heroes feast'
-Duration     : Restorative
-Level        : 48 Cleric, 53 Druid
-Minimum Cost : 60 Mana
-
-By means of this spell, the caster causes a magnificent feast to appear.
-Only the caster's group partakes of it. This feast slakes the thirst of
-those who eat it as well as satiating them. It also restores one hitpoint
-and returns movement points to their maximum.¢
-End
-
-#HELP
-Level    0
-WebInvis 0
 Keywords HIDE
 Related  SNEAK
 Text     Usage        : hide

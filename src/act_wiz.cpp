@@ -1256,14 +1256,6 @@ CMDF( do_mstat )
 
         ch->printf( "|CHA   : &G%10d &w|BseAge: &G%10d &w|Agemod: &G%10d &w|\r\n", victim->get_curr_cha(  ), victim->pcdata->age, victim->pcdata->age_bonus );
 
-        if( victim->pcdata->condition[COND_THIRST] == -1 )
-            mudstrlcpy( lbuf, "|Thirst: &G    Immune &w", 256 );
-        else
-            snprintf( lbuf, 256, "|Thirst: &G%10d &w", victim->pcdata->condition[COND_THIRST] );
-        if( victim->pcdata->condition[COND_FULL] == -1 )
-            mudstrlcat( lbuf, "|Hunger: &G    Immune &w", 256 );
-        else
-            snprintf( lbuf + strlen( lbuf ), 256 - strlen( lbuf ), "|Hunger: &G%10d &w", victim->pcdata->condition[COND_FULL] );
         ch->printf( "|LCK   : &G%10d &w%s|Drunk : &G%d &w\r\n", victim->get_curr_lck(  ), lbuf, victim->pcdata->condition[COND_DRUNK] );
 
         ch->printf( "|Class :&G%11s &w|Mental: &G%10d &w|#Attks: &G%10f&w |Barehand: &G%d&wd&G%d&w+&G%d&w\r\n",
@@ -3762,10 +3754,6 @@ CMDF( do_restore )
                 vch->hit = vch->max_hit;
                 vch->mana = vch->max_mana;
                 vch->move = vch->max_move;
-                if( vch->pcdata->condition[COND_FULL] != -1 )
-                    vch->pcdata->condition[COND_FULL] = sysdata->maxcondval;
-                if( vch->pcdata->condition[COND_THIRST] != -1 )
-                    vch->pcdata->condition[COND_THIRST] = sysdata->maxcondval;
                 vch->pcdata->condition[COND_DRUNK] = 0;
                 vch->mental_state = 0;
                 vch->update_pos(  );
@@ -3801,10 +3789,6 @@ CMDF( do_restore )
 
         if( !victim->isnpc(  ) )
         {
-            if( victim->pcdata->condition[COND_FULL] != -1 )
-                victim->pcdata->condition[COND_FULL] = sysdata->maxcondval;
-            if( victim->pcdata->condition[COND_THIRST] != -1 )
-                victim->pcdata->condition[COND_THIRST] = sysdata->maxcondval;
             victim->pcdata->condition[COND_DRUNK] = 0;
             victim->mental_state = 0;
         }
@@ -7503,7 +7487,6 @@ bool load_race_file( const char *fname )
                 KEY( "Height", race->height, fread_number( fp ) );
                 KEY( "Hit", race->hit, fread_number( fp ) );
                 KEY( "HP_Regen", race->hp_regen, fread_number( fp ) );
-                KEY( "Hunger_Mod", race->hunger_mod, fread_number( fp ) );
                 break;
 
             case 'L':
@@ -7574,10 +7557,6 @@ bool load_race_file( const char *fname )
                     }
                     break;
                 }
-                break;
-
-            case 'T':
-                KEY( "Thirst_Mod", race->thirst_mod, fread_number( fp ) );
                 break;
 
             case 'V':
@@ -7703,8 +7682,6 @@ void write_race_file( int ra )
         fprintf( fpout, "Defenses   %s~\n", bitset_string( race->defenses, defense_flags ) );
     fprintf( fpout, "Height     %d\n", race->height );
     fprintf( fpout, "Weight     %d\n", race->weight );
-    fprintf( fpout, "Hunger_Mod  %d\n", race->hunger_mod );
-    fprintf( fpout, "Thirst_mod  %d\n", race->thirst_mod );
     fprintf( fpout, "Mana_Regen  %d\n", race->mana_regen );
     fprintf( fpout, "HP_Regen    %d\n", race->hp_regen );
 
@@ -7778,8 +7755,6 @@ bool create_new_race( int race, const string & argument )
     race_table[race]->bodypart_where_names.clear(  );
     race_table[race]->height = 0;
     race_table[race]->weight = 0;
-    race_table[race]->hunger_mod = 0;
-    race_table[race]->thirst_mod = 0;
     race_table[race]->mana_regen = 0;
     race_table[race]->hp_regen = 0;
 
@@ -7807,7 +7782,7 @@ CMDF( do_setrace )
         ch->print( "  mana affected resist suscept language\r\n" );
         ch->print( "  attack defense alignment acplus \r\n" );
         ch->print( "  minalign maxalign height weight\r\n" );
-        ch->print( "  hungermod thirstmod expmultiplier\r\n" );
+        ch->print( "  expmultiplier\r\n" );
         ch->print( "  saving_poison_death saving_wand\r\n" );
         ch->print( "  saving_para_petri saving_breath\r\n" );
         ch->print( "  saving_spell_staff bodyparts\r\n" );
@@ -8189,20 +8164,6 @@ CMDF( do_setrace )
         ch->print( "Done.\r\n" );
         return;
     }
-    if( !str_cmp( arg2, "thirstmod" ) )
-    {
-        race->thirst_mod = atoi( argument.c_str(  ) );
-        write_race_file( ra );
-        ch->print( "Done.\r\n" );
-        return;
-    }
-    if( !str_cmp( arg2, "hungermod" ) )
-    {
-        race->hunger_mod = atoi( argument.c_str(  ) );
-        write_race_file( ra );
-        ch->print( "Done.\r\n" );
-        return;
-    }
     if( !str_cmp( arg2, "maxalign" ) )
     {
         race->maxalign = atoi( argument.c_str(  ) );
@@ -8340,7 +8301,7 @@ CMDF( do_showrace )
 
     ch->pagerf( "Min Align: %d\tMax Align: %-d\t\tXP Mult: %-d%%\r\n", race->minalign, race->maxalign, race->exp_multiplier );
 
-    ch->pagerf( "Height: %3d in.\t\tWeight: %4d lbs.\tHungerMod: %d\tThirstMod: %d\r\n", race->height, race->weight, race->hunger_mod, race->thirst_mod );
+    ch->pagerf( "Height: %3d in.\t\tWeight: %4d lbs.\r\n", race->height, race->weight );
 
     ch->pagerf( "Body Parts: %s\r\n", bitset_string( race->body_parts, part_flags ) );
     ch->pagerf( "Spoken Languages: %s\r\n", bitset_string( race->language, lang_names ) );

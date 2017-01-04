@@ -161,9 +161,6 @@ CMDF( do_eat )
 {
     obj_data *obj;
     ch_ret retcode;
-    int foodcond;
-    bool immH = false;  /* Immune to hunger */
-    bool immT = false;  /* Immune to thirst */
 
     if( argument.empty(  ) )
     {
@@ -171,9 +168,8 @@ CMDF( do_eat )
         return;
     }
 
-    if( ch->isnpc(  ) || ch->pcdata->condition[COND_FULL] > 5 )
-        if( ms_find_obj( ch ) )
-            return;
+    if( ch->isnpc(  ) )
+        return;
 
     if( !( obj = find_obj( ch, argument, true ) ) )
         return;
@@ -186,19 +182,7 @@ CMDF( do_eat )
             act( AT_ACTION, "You try to nibble on $p...", ch, obj, nullptr, TO_CHAR );
             return;
         }
-
-        if( !ch->isnpc(  ) && ch->pcdata->condition[COND_FULL] > sysdata->maxcondval - 8 )
-        {
-            ch->print( "You are too full to eat more.\r\n" );
-            return;
-        }
     }
-
-    if( !ch->isnpc(  ) && ch->pcdata->condition[COND_FULL] == -1 )
-        immH = true;
-
-    if( !ch->isnpc(  ) && ch->pcdata->condition[COND_THIRST] == -1 )
-        immT = true;
 
     /*
      * required due to object grouping 
@@ -209,134 +193,43 @@ CMDF( do_eat )
         act( AT_PLAIN, "You take $p from $P.", ch, obj, obj->in_obj, TO_CHAR );
         act( AT_PLAIN, "$n takes $p from $P.", ch, obj, obj->in_obj, TO_ROOM );
     }
-    if( ch->fighting && number_percent(  ) > ( ch->get_curr_dex(  ) * 2 + 47 ) )
-    {
-        char buf[MSL];
 
-        snprintf( buf, MSL, "%s",
-                  ( ch->in_room->sector_type == SECT_UNDERWATER ||
-                    ch->in_room->sector_type == SECT_WATER_SWIM ||
-                    ch->in_room->sector_type == SECT_WATER_NOSWIM ||
-                    ch->in_room->sector_type == SECT_RIVER ) ? "dissolves in the water" :
-                  ( ch->in_room->sector_type == SECT_AIR || ch->in_room->flags.test( ROOM_NOFLOOR ) ) ? "falls far below" : "is trampled underfoot" );
-        act( AT_MAGIC, "$n drops $p, and it $T.", ch, obj, buf, TO_ROOM );
-        act( AT_MAGIC, "Oops, $p slips from your hand and $T!", ch, obj, buf, TO_CHAR );
-    }
-    else
+    if( !oprog_use_trigger( ch, obj, nullptr, nullptr ) )
     {
-        if( !oprog_use_trigger( ch, obj, nullptr, nullptr ) )
+        if( !obj->action_desc || obj->action_desc[0] == '\0' )
         {
-            if( !obj->action_desc || obj->action_desc[0] == '\0' )
-            {
-                act( AT_ACTION, "$n eats $p.", ch, obj, nullptr, TO_ROOM );
-                act( AT_ACTION, "You eat $p.", ch, obj, nullptr, TO_CHAR );
-                ch->sound( "eat.wav", 100, false );
-            }
+            act( AT_ACTION, "$n eats $p.", ch, obj, nullptr, TO_ROOM );
+            act( AT_ACTION, "You eat $p.", ch, obj, nullptr, TO_CHAR );
+            ch->sound( "eat.wav", 100, false );
+        }
+        else
+            actiondesc( ch, obj );
+    }
+
+    switch ( obj->item_type )
+    {
+        default:
+            break;
+
+        case ITEM_COOK:
+        case ITEM_FOOD:
+            ch->WAIT_STATE( sysdata->pulsepersec / 3 );
+            break;
+
+        case ITEM_PILL:
+            if( ch->who_fighting(  ) && ch->IS_PKILL(  ) )
+                ch->WAIT_STATE( sysdata->pulsepersec / 4 );
             else
-                actiondesc( ch, obj );
-        }
-        switch ( obj->item_type )
-        {
-            default:
-                break;
-
-            case ITEM_COOK:
-            case ITEM_FOOD:
                 ch->WAIT_STATE( sysdata->pulsepersec / 3 );
-                if( obj->timer > 0 && obj->value[1] > 0 )
-                    foodcond = ( obj->timer * 10 ) / obj->value[1];
-                else
-                    foodcond = 10;
-
-                if( !ch->isnpc(  ) )
-                {
-                    int condition;
-
-                    condition = ch->pcdata->condition[COND_FULL];
-                    gain_condition( ch, COND_FULL, ( obj->value[0] * foodcond ) / 10 );
-                    if( condition <= 1 && ch->pcdata->condition[COND_FULL] > 1 )
-                        ch->print( "You are no longer hungry.\r\n" );
-                    else if( ch->pcdata->condition[COND_FULL] > sysdata->maxcondval * 0.8 )
-                        ch->print( "You are full.\r\n" );
-                }
-
-                if( obj->value[3] != 0 || ( foodcond < 4 && number_range( 0, foodcond + 1 ) == 0 ) || ( obj->item_type == ITEM_COOK && obj->value[2] == 0 ) )
-                {
-                    /*
-                     * The food was poisoned! 
-                     */
-                    affect_data af;
-
-                    /*
-                     * Half Trolls are not affected by bad food 
-                     */
-                    if( ch->race == RACE_HALF_TROLL )
-                        ch->printf( "%s was poisoned, but had no affect on you.\r\n", obj->short_descr );
-
-                    else
-                    {
-                        if( obj->value[3] != 0 )
-                        {
-                            act( AT_POISON, "$n chokes and gags.", ch, nullptr, nullptr, TO_ROOM );
-                            act( AT_POISON, "You choke and gag.", ch, nullptr, nullptr, TO_CHAR );
-                            ch->mental_state = URANGE( 20, ch->mental_state + 5, 100 );
-                        }
-                        else
-                        {
-                            act( AT_POISON, "$n gags on $p.", ch, obj, nullptr, TO_ROOM );
-                            act( AT_POISON, "You gag on $p.", ch, obj, nullptr, TO_CHAR );
-                            ch->mental_state = URANGE( 15, ch->mental_state + 5, 100 );
-                        }
-
-                        af.type = gsn_poison;
-                        af.duration = 2 * obj->value[0] * ( obj->value[3] > 0 ? obj->value[3] : 1 );
-                        af.location = APPLY_NONE;
-                        af.modifier = 0;
-                        af.bit = AFF_POISON;
-                        ch->affect_join( &af );
-                    }
-                }
-                break;
-
-            case ITEM_PILL:
-                if( ch->who_fighting(  ) && ch->IS_PKILL(  ) )
-                    ch->WAIT_STATE( sysdata->pulsepersec / 4 );
-                else
-                    ch->WAIT_STATE( sysdata->pulsepersec / 3 );
-                /*
-                 * allow pills to fill you, if so desired 
-                 */
-                if( !ch->isnpc(  ) && obj->value[4] )
-                {
-                    int condition;
-
-                    condition = ch->pcdata->condition[COND_FULL];
-                    gain_condition( ch, COND_FULL, obj->value[4] );
-                    if( condition <= 1 && ch->pcdata->condition[COND_FULL] > 1 )
-                        ch->print( "You are no longer hungry.\r\n" );
-                    else if( ch->pcdata->condition[COND_FULL] > sysdata->maxcondval - 8 )
-                        ch->print( "You are full.\r\n" );
-                }
-                retcode = obj_cast_spell( obj->value[1], obj->value[0], ch, ch, nullptr );
-                if( retcode == rNONE )
-                    retcode = obj_cast_spell( obj->value[2], obj->value[0], ch, ch, nullptr );
-                if( retcode == rNONE )
-                    retcode = obj_cast_spell( obj->value[3], obj->value[0], ch, ch, nullptr );
-                break;
-        }
+            retcode = obj_cast_spell( obj->value[1], obj->value[0], ch, ch, nullptr );
+            if( retcode == rNONE )
+                retcode = obj_cast_spell( obj->value[2], obj->value[0], ch, ch, nullptr );
+            if( retcode == rNONE )
+                retcode = obj_cast_spell( obj->value[3], obj->value[0], ch, ch, nullptr );
+            break;
     }
+
     obj->extract(  );
-
-    /*
-     * Reset immunity for those who have it 
-     */
-    if( !ch->isnpc(  ) )
-    {
-        if( immH )
-            ch->pcdata->condition[COND_FULL] = -1;
-        if( immT )
-            ch->pcdata->condition[COND_THIRST] = -1;
-    }
 }
 
 CMDF( do_quaff )
