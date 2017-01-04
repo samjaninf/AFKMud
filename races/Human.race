@@ -20,8 +20,6 @@ Exp_Mult   100
 Bodyparts  head arms legs heart brains guts hands feet ankles fingers ear eye~
 Height     69
 Weight     150
-Hunger_Mod  0
-Thirst_mod  0
 Mana_Regen  0
 HP_Regen    0
 Skill 'bargain' 35 85
