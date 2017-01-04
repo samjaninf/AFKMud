@@ -3,6 +3,11 @@ src/o/*
 
 #build target
 src/afkmud
+src/resolver*
+src/dependencies.d
+
+# game data
+area/DIR_CHECK_PASSED
 
 # Windows image file caches
 Thumbs.db
